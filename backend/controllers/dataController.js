@@ -14,6 +14,16 @@ dataController.getWaterData = async (req, res) => {
   }
 };
 
+dataController.getWaterDataByUser = async (req, res) => {
+  const name = req.params.user
+  try {
+    const data = await Water.find({userId: name}).sort({date: 1})
+    res.json(data)
+  } catch (err) {
+    res.status(500).json({message: err.message});
+  }
+}
+
 dataController.createWaterData = async (req, res) => {
   const water = new Water({
     date: req.body.date,

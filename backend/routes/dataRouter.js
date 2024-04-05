@@ -7,6 +7,7 @@ const dataController = require('../controllers/dataController');
 router.get('/water', dataController.getWaterData);
 router.post('/water', dataController.createWaterData);
 router.delete('/water/:id', dataController.deleteWaterData);
+router.get('/water/:user', dataController.getWaterDataByUser);
 
 // Calorie routes
 router.get('/calorie', dataController.getCalorieData);

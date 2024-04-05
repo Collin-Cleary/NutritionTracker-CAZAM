@@ -20,7 +20,7 @@ describe('API Tests', () => {
   // Before each test, connect to the database, add dummy data, and start the test server
   before(async () => {
     // Connect to MongoDB database, assuming the connection logic is implemented in server.js
-    await mongoose.connect('mongodb://localhost:27017/cazam', { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect('mongodb://127.0.0.1:27017/cazam', { useNewUrlParser: true, useUnifiedTopology: true });
 
     // Read JSON files and insert data into the database
     const waterDataPath = path.join(__dirname, '../data/water.json');
@@ -67,6 +67,15 @@ describe('API Tests', () => {
         .post('/api/water')
         .send(newData);
       assert.equal(response.status, 201);
+    });
+
+    it('should get water data for just one person', async () => {
+      const user = 'user1';
+      const url = `/api/water/${user}`;
+      const response = await request(`http://localhost:${testPort}`).get(url);
+      assert.equal(response.status, 200);
+      assert(Array.isArray(response.body), response.body);
+      assert.equal(response.body.length, 1, response.body);
     });
 
   });
