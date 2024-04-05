@@ -40,4 +40,5 @@ npm 8.19.2
 
 so far our tests just consist of testing the api calls to our backend
 
-![tests passing screenshot](<../media/testsPass.jpg>)
+![Screenshot 2024-04-05 005146](https://github.com/Collin-Cleary/NutritionTracker-CAZAM/assets/89468342/c1659b2e-c179-4ff8-a731-77c3ef4e8954)
+
