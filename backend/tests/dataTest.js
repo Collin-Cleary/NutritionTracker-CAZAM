@@ -20,7 +20,7 @@ describe('API Tests', () => {
   // Before each test, connect to the database, add dummy data, and start the test server
   before(async () => {
     // Connect to MongoDB database, assuming the connection logic is implemented in server.js
-    await mongoose.connect('mongodb://localhost:27017/cazam', { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect('mongodb://127.0.0.1:27017/cazam', { useNewUrlParser: true, useUnifiedTopology: true });
 
     // Read JSON files and insert data into the database
     const waterDataPath = path.join(__dirname, '../data/water.json');
@@ -69,6 +69,15 @@ describe('API Tests', () => {
       assert.equal(response.status, 201);
     });
 
+    it('should get water data for just one person', async () => {
+      const user = 'user1';
+      const url = `/api/water/${user}`;
+      const response = await request(`http://localhost:${testPort}`).get(url);
+      assert.equal(response.status, 200);
+      assert(Array.isArray(response.body), "not an array");
+      assert.equal(response.body.length, 1, "too much data");
+    });
+
   });
 
   // Calorie data test cases
@@ -88,6 +97,15 @@ describe('API Tests', () => {
       assert.equal(response.status, 201);
     });
 
+    it('should get calorie data for just one person', async () => {
+      const user = 'user1';
+      const url = `/api/calorie/${user}`;
+      const response = await request(`http://localhost:${testPort}`).get(url);
+      assert.equal(response.status, 200);
+      assert(Array.isArray(response.body), "not an array");
+      assert.equal(response.body.length, 1, "too much data");
+    });
+
   });
 
   // Weight data test cases
@@ -105,6 +123,15 @@ describe('API Tests', () => {
         .post('/api/weight')
         .send(newData);
       assert.equal(response.status, 201);
+    });
+
+    it('should get weight data for just one person', async () => {
+      const user = 'user1';
+      const url = `/api/weight/${user}`;
+      const response = await request(`http://localhost:${testPort}`).get(url);
+      assert.equal(response.status, 200);
+      assert(Array.isArray(response.body), "not an array");
+      assert.equal(response.body.length, 1, "to much data");
     });
 
    // Login API test cases
