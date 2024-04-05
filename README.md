@@ -40,4 +40,4 @@ npm 8.19.2
 
 so far our tests just consist of testing the api calls to our backend
 
-![tests passing screenshot](<../media/Screenshot 2024-04-05 005146.jpg>)
+![tests passing screenshot](<../media/testsPass.jpg>)
