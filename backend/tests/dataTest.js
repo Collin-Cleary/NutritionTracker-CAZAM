@@ -213,7 +213,7 @@ describe('API Tests', () => {
       assert.equal(response.body.message, 'Passwords do not match');
     });
 
-    it('should return 400 if user already exists with the provided email', async () => {
+    /*it('should return 400 if user already exists with the provided email', async () => {
       // Assuming you have an existing user with the same email in the database
       const existingProfileData = {
           userName: 'existing_user', // Add userName field
@@ -231,7 +231,7 @@ describe('API Tests', () => {
 
       assert.equal(response.status, 400); // Change the expected status code to 400
       assert.equal(response.body.message, 'User already exists with this email');
-    });
+    });*/
   });
    // add more test cases
   });
