@@ -1,6 +1,10 @@
 # NutritionTracker
 
-[badge1 for codecov][badge2 for license]
+[badge1 for codecov]
+
+[badge2 for license]
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Nutrition Tracker is a web app where account holders can track their meals, nutrition details, calorie count, water intake, and weight.
 
