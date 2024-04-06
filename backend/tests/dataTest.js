@@ -174,6 +174,65 @@ describe('API Tests', () => {
     });
    });
    
+
+  // Create profile API test case
+   describe('Profile Creation API', () => {
+    it('should create a new profile successfully', async () => {
+      const newProfileData = {
+          userName: 'john_doe',
+          name: 'John Doe',
+          email: 'johndoe@example.com',
+          password: 'password123',
+          confirmPassword: 'password123',
+          height: 180,
+          weight: 75
+      };
+
+      const response = await request(`http://localhost:3000`).post('/auth/create-profile')
+          .send(newProfileData);
+
+      assert.equal(response.status, 201);
+      assert.equal(response.body.message, 'Profile created successfully');
+    })
+
+    it('should return 400 if passwords do not match', async () => {
+      const invalidProfileData = {
+          name: 'Test User',
+          email: 'test@example.com',
+          password: 'password123',
+          confirmPassword: 'password456', // Different password
+          height: 180,
+          weight: 75
+      };
+
+      const response = await request(`http://localhost:${testPort}`)
+          .post('/auth/create-profile')
+          .send(invalidProfileData);
+
+      assert.equal(response.status, 400);
+      assert.equal(response.body.message, 'Passwords do not match');
+    });
+
+    it('should return 400 if user already exists with the provided email', async () => {
+      // Assuming you have an existing user with the same email in the database
+      const existingProfileData = {
+          userName: 'existing_user', // Add userName field
+          name: 'Existing User',
+          email: 'test@example.com', // Same email as existing user
+          password: 'password123',
+          confirmPassword: 'password123',
+          height: 170,
+          weight: 70
+      };
+
+      const response = await request(`http://localhost:${testPort}`)
+          .post('/auth/create-profile')
+          .send(existingProfileData);
+
+      assert.equal(response.status, 400); // Change the expected status code to 400
+      assert.equal(response.body.message, 'User already exists with this email');
+    });
+  });
    // add more test cases
   });
 });
