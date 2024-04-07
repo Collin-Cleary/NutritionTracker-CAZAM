@@ -2,7 +2,7 @@ const Water = require('../models/waterModel');
 const Calorie = require('../models/calorieModel');
 const Weight = require('../models/weightModel');
 const FoodEntry = require('../models/foodEntryModel');
-const FoodItem = require('../models/foodItemModel');
+const {FoodItem, deleteFoodItemData, createFoodItemData, getFoodItemData} = require('../models/foodItemModel');
 
 const dataController = {};
 
@@ -145,39 +145,18 @@ dataController.deleteFoodEntryData = async (req, res) => {
 
 // Food Item controller methods
 dataController.getFoodItemData = async (req, res) => {
-  try {
-    query = {}
-    query[req.header("field")] = req.header("value")
-    const data = await FoodItem.find(query);
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  result = getFoodItemData(req.body.query)
+  res.status(result.status).json(result.json)
 };
 
 dataController.createFoodItemData = async (req, res) => {
-  const foodItem = new FoodItem({
-    nutrition : req.body.nutrition,
-    name : req.body.name,
-    ingredients : req.body.ingredients,
-    userId: req.body.userId
-  });
-
-  try {
-    const newFoodItem = await foodItem.save();
-    res.status(201).json(newFoodItem);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+  result = createFoodItemData(req.body.nutrition, req.body.name, req.body.ingredients, req.body.userId)
+  res.status(result.status).json(result.json)
 };
 
 dataController.deleteFoodItemData = async (req, res) => {
-  try {
-    await FoodItem.findByIdAndDelete(req.params.id);
-    res.status(204).json({ message: 'Food Item data deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  result = deleteFoodItemData(req.body.id)
+  res.status(result.status).json(result.json)
 };
 
 
