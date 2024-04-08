@@ -145,7 +145,7 @@ describe('Unit Tests', () => {
   });
 
   // Registration & Login
-  describe('Auth Controller', () => {
+  describe('Login API', () => {
     afterEach(() => {
       sinon.restore();
     });
@@ -181,76 +181,89 @@ describe('Unit Tests', () => {
       assert(res.status.calledOnceWithExactly(401));
       assert(res.json.calledOnceWithExactly({ message: 'Invalid username or password' }));
     });
+  });
 
-    it('should return success message for logout', () => {
-      const req = {}; // Mock request object
-      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    describe('Logout API', () => {
+      afterEach(() => {
+        sinon.restore();
+      });
+
+      it('should return success message for logout', () => {
+        const req = {}; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+      
+        authController.logout(req, res);
+      
+        assert(res.status.calledOnceWithExactly(200));
+        assert(res.json.calledOnceWithExactly({ message: 'Logout successful' }));
+      });
+
+    });
     
-      authController.logout(req, res);
-    
-      assert(res.status.calledOnceWithExactly(200));
-      assert(res.json.calledOnceWithExactly({ message: 'Logout successful' }));
-    });
 
-    it('should create a new profile successfully', async () => {
-      const newProfileData = {
-        userName: 'john_doe',
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        password: 'password123',
-        confirmPassword: 'password123',
-        height: 180,
-        weight: 75
-      };
-      const req = { body: newProfileData }; // Mock request object
-      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
-      sinon.stub(User, 'findOne').resolves(null);
-      sinon.stub(bcrypt, 'hash').resolves('hashedPassword');
-      sinon.stub(User.prototype, 'save').resolves();
+    describe('Profile Creation API', () => {
+      afterEach(() => {
+        sinon.restore();
+      });
+      it('should create a new profile successfully', async () => {
+        const newProfileData = {
+          userName: 'john_doe',
+          name: 'John Doe',
+          email: 'johndoe@example.com',
+          password: 'password123',
+          confirmPassword: 'password123',
+          height: 180,
+          weight: 75
+        };
+        const req = { body: newProfileData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+        sinon.stub(User, 'findOne').resolves(null);
+        sinon.stub(bcrypt, 'hash').resolves('hashedPassword');
+        sinon.stub(User.prototype, 'save').resolves();
 
-      await authController.createProfile(req, res);
+        await authController.createProfile(req, res);
 
-      assert(res.status.calledOnceWithExactly(201));
-      assert(res.json.calledOnceWithExactly({ message: 'Profile created successfully' }));
-    });
+        assert(res.status.calledOnceWithExactly(201));
+        assert(res.json.calledOnceWithExactly({ message: 'Profile created successfully' }));
+      });
 
-    it('should return 400 if passwords do not match', async () => {
-      const invalidProfileData = {
-        name: 'Test User',
-        email: 'test@example.com',
-        password: 'password123',
-        confirmPassword: 'password456', // Different password
-        height: 180,
-        weight: 75
-      };
-      const req = { body: invalidProfileData }; // Mock request object
-      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+      it('should return 400 if passwords do not match', async () => {
+        const invalidProfileData = {
+          name: 'Test User',
+          email: 'test@example.com',
+          password: 'password123',
+          confirmPassword: 'password456', // Different password
+          height: 180,
+          weight: 75
+        };
+        const req = { body: invalidProfileData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
 
-      await authController.createProfile(req, res);
+        await authController.createProfile(req, res);
 
-      assert(res.status.calledOnceWithExactly(400));
-      assert(res.json.calledOnceWithExactly({ message: 'Passwords do not match' }));
-    });
+        assert(res.status.calledOnceWithExactly(400));
+        assert(res.json.calledOnceWithExactly({ message: 'Passwords do not match' }));
+      });
 
-    it('should return 400 if user already exists with the provided email', async () => {
-      const existingProfileData = {
-        userName: 'existing_user',
-        name: 'Existing User',
-        email: 'test@example.com',
-        password: 'password123',
-        confirmPassword: 'password123',
-        height: 170,
-        weight: 70
-      };
-      const req = { body: existingProfileData }; // Mock request object
-      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
-      sinon.stub(User, 'findOne').resolves({ email: 'test@example.com' });
+      it('should return 400 if user already exists with the provided email', async () => {
+        const existingProfileData = {
+          userName: 'existing_user',
+          name: 'Existing User',
+          email: 'test@example.com',
+          password: 'password123',
+          confirmPassword: 'password123',
+          height: 170,
+          weight: 70
+        };
+        const req = { body: existingProfileData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+        sinon.stub(User, 'findOne').resolves({ email: 'test@example.com' });
 
-      await authController.createProfile(req, res);
+        await authController.createProfile(req, res);
 
-      assert(res.status.calledOnceWithExactly(400));
-      assert(res.json.calledOnceWithExactly({ message: 'User already exists with this email' }));
-    });
+        assert(res.status.calledOnceWithExactly(400));
+        assert(res.json.calledOnceWithExactly({ message: 'User already exists with this email' }));
+      });
 
   });
 
