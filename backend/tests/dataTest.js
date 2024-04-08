@@ -145,5 +145,29 @@ describe('Unit Tests', () => {
   });
 
   // Registration & Login
+  describe('Auth Controller', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('should login with correct credentials and return JWT token', () => {
+      try{
+          const validCredentials = { userName: 'john_doe', password: 'password123' };
+          const req = { body: validCredentials }; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+          const user = { userName: validCredentials.userName };
+          sinon.stub(User, 'findOne').resolves(user);
+          sinon.stub(bcrypt, 'compare').resolves(true);
+          sinon.stub(jwt, 'sign').returns('mockToken');
+    
+          authController.login(req, res);
+    
+          assert(res.status.calledOnceWithExactly(200));
+          assert(res.json.calledOnceWithExactly({ token: 'mockToken' }));
+      } catch(error){
+        console.log(error)
+      }
+    });
+  });
 
 });
