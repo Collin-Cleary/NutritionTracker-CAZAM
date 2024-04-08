@@ -192,7 +192,27 @@ describe('Unit Tests', () => {
       assert(res.json.calledOnceWithExactly({ message: 'Logout successful' }));
     });
 
-    
+    it('should create a new profile successfully', async () => {
+      const newProfileData = {
+        userName: 'john_doe',
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+        height: 180,
+        weight: 75
+      };
+      const req = { body: newProfileData }; // Mock request object
+      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+      sinon.stub(User, 'findOne').resolves(null);
+      sinon.stub(bcrypt, 'hash').resolves('hashedPassword');
+      sinon.stub(User.prototype, 'save').resolves();
+
+      await authController.createProfile(req, res);
+
+      assert(res.status.calledOnceWithExactly(201));
+      assert(res.json.calledOnceWithExactly({ message: 'Profile created successfully' }));
+    });
 
 
   });
