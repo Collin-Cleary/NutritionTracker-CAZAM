@@ -56,6 +56,33 @@ describe('Unit Tests', () => {
   });
 
   // Calorie
+  describe('Calorie Controller', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('should get calorie data', async () => {
+      try{
+          const mockData = [
+            { date: new Date(), userId: '123', intake: 500 },
+            { date: new Date(), userId: '456', intake: 300 },
+          ];
+          const req = {}; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    
+          const findStub = sinon.stub(Calorie, 'find').resolves(mockData);
+    
+          await dataController.getCalorieData(req, res);
+    
+          assert(res.status.calledOnceWithExactly(200));
+          assert(res.json.calledOnceWithExactly(mockData));
+      } catch(error){
+        console.log(error)
+      }
+    });
+
+
+  });
 
   // Weight
 
