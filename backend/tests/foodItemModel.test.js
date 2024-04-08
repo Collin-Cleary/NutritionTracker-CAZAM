@@ -9,7 +9,7 @@ describe('FoodItem Functions', () => {
         const results = await deleteFoodItem(1);
         expect(results.status).toBe(204);
       });
-    // Currently mockingoose isnt properly throwing the error meaing it cant be tested
+    // Currently having issues with mocking errors TODO
     //   it ('should return 500 on failure', async () => {
     //     await mockingoose(FoodItem).toReturn(new Error("example database error"), 'findByIdAndDelete');
     //     const results = await deleteFoodItem(1);
@@ -21,7 +21,7 @@ describe('FoodItem Functions', () => {
         it ('should return 201 and the item on success', async () => {
             testfooditem = {nutrition : {vitamin : 5}, ingredients : "stuff", name : "food test", userId : "abc"}
             mockingoose(FoodItem).toReturn(testfooditem, 'save');
-            const results = await createFoodItemData({vitamin : 5}, "food test", "stuff", 2);
+            const results = await createFoodItemData({vitamin : 5}, "food test", "stuff", "abc");
             expect(results.status).toBe(201);
             const actualResult = JSON.parse(JSON.stringify(results.json));
             delete actualResult._id;

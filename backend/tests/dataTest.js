@@ -9,7 +9,8 @@ const mongoose = require('mongoose');
 const Water = require('../models/waterModel');
 const Calorie = require('../models/calorieModel');
 const Weight = require('../models/weightModel');
-const FoodItem = require('../models/foodItemModel');
+const {FoodItem} = require('../models/foodItemModel');
+const { FoodEntry } = require('../models/foodEntryModel');
 
 // Test server port
 const testPort = 3006;
@@ -37,6 +38,10 @@ describe('API Tests', () => {
     const foodItemData = JSON.parse(fs.readFileSync(foodItemDataPath, 'utf8'));
     await FoodItem.insertMany(foodItemData);
 
+    const foodEntryDataPath = path.join(__dirname, '../data/foodEntry.json');
+    const foodEntryData = JSON.parse(fs.readFileSync(foodEntryDataPath, 'utf8'));
+    await FoodEntry.insertMany(foodEntryData);
+
     // Start the test server
     app.listen(testPort, () => {
       console.log(`Test server listening at http://localhost:${testPort}`);
@@ -50,6 +55,7 @@ describe('API Tests', () => {
     await Calorie.deleteMany({});
     await Weight.deleteMany({});
     await FoodItem.deleteMany({});
+    await FoodEntry.deleteMany({})
     // Disconnect from MongoDB database
     await mongoose.disconnect();
   });
@@ -114,12 +120,12 @@ describe('API Tests', () => {
   // Food Item test cases
   describe('Food Item API', () => {
     it('should get food Item data', async () => {
-      const response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "user1");
+      const response = await request(`http://localhost:${testPort}`).get('/api/foodItem').query({"userId" : "user1"})
       assert.equal(response.status, 200);
       assert(Array.isArray(response.body), 'Response is not an array');
       assert(response.body.length == 2, "expecting 2 entries")
       response.body.map((item) =>{assert(item.userId == "user1", "can query")}) 
-    });
+    }).timeout(5000);
 
     it('should add food item data', async () => {
       const newData = { "nutrition": {"vitamin C" : 20, "iron" : 2}, "name": "food", "ingredients": "stuff and things" ,"userId" : "testuser"};
@@ -127,16 +133,33 @@ describe('API Tests', () => {
         .post('/api/foodItem')
         .send(newData);
       assert.equal(response.status, 201);
-      response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "testuser");
+      response = await request(`http://localhost:${testPort}`).get('/api/foodItem').query({"userId" : "testuser"});
       assert(response.body.length == 1, "expecting 1 entry")
     });
 
     it('should delete food item data', async () => {
-      let response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "user2");
-      assert(response.body.length == 1, "expecting 1 entry")
+      let response = await request(`http://localhost:${testPort}`).get('/api/foodItem').query({"userId" : "user1"})
+      assert(response.body.length == 2, "expecting 2 entries")
       response = await request(`http://localhost:${testPort}`).delete(`/api/foodItem/${response.body[0]._id}`)
-      response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "user2");
-      assert(response.body.length == 0, "expecting no entries")
+      response = await request(`http://localhost:${testPort}`).get('/api/foodItem').query({"userId" : "user1"})
+      assert(response.body.length == 1, "expecting 1 entry")
+    }).timeout(5000);
+  });
+
+  describe('Food Entry API', () => {
+    it('should get food Item data', async () => {
+      const response = await request(`http://localhost:${testPort}`).get('/api/foodEntry').query({"userId" : "abc"});
+      assert.equal(response.status, 200);
+      assert(Array.isArray(response.body), 'Response is not an array');
+      assert(response.body.length == 1, "expecting 1 entry")
+      expected = {"date" : "2020-12-31T05:00:00.000Z", "parts" : [{"_id" : "4edd40c86762e0fb12000003","nutrition" : {"vitamin" : 5}, "ingredients" : "stuff", "name" : "food test", "userId" : "abc"}], "name" : "food entry test", "userId" : "abc"}  
+      //deleting fields we dont control
+      delete response.body[0].__v
+      delete response.body[0]._id
+      delete response.body[0].parts[0].__v
+
+      assert.deepEqual(response.body, [expected])
     });
   });
+
 });

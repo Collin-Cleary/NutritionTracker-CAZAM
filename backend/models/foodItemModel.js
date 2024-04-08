@@ -19,7 +19,7 @@ async function deleteFoodItem(id) {
   }
 }
 
-async function createFoodItemData(nutrition, name, ingredients, userId) {
+async function createFoodItem(nutrition, name, ingredients, userId) {
   const fi = new FoodItem({
     nutrition : nutrition,
     name : name,
@@ -35,7 +35,7 @@ async function createFoodItemData(nutrition, name, ingredients, userId) {
   }
 }
 
-async function getFoodItemData(query) {
+async function getFoodItem(query) {
   try {
     const data = await FoodItem.find(query)
     return {status : 200, json : data}
@@ -44,4 +44,4 @@ async function getFoodItemData(query) {
   }
 }
 
-module.exports = {FoodItem, deleteFoodItem, createFoodItemData, getFoodItemData};
+module.exports = {FoodItem, deleteFoodItem, createFoodItem, getFoodItem};
