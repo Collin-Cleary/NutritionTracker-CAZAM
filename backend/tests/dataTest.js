@@ -12,6 +12,8 @@ const jwt = require('jsonwebtoken');
 
 
 describe('Unit Tests', () => {
+
+  // Water
   describe('Water Controller', () => {
     afterEach(() => {
       sinon.restore();
@@ -33,5 +35,30 @@ describe('Unit Tests', () => {
       }
     });
 
+    it('should add water data', async () => {
+      try{
+        const newData = { date: new Date(), userId: '123', amount: 500 };
+        const req = { body: newData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+
+        const saveStub = sinon.stub(Water.prototype, 'save').resolves(newData);
+
+        await dataController.createWaterData(req, res);
+
+        assert(saveStub.calledOnce);
+        assert(res.status.calledOnceWithExactly(201));
+        assert(res.json.calledOnceWithExactly(newData));
+      } catch (error) {
+        console.error(error);
+      }      
+    });
+
   });
+
+  // Calorie
+
+  // Weight
+
+  // Registration & Login
+
 });
