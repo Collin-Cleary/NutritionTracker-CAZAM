@@ -12,12 +12,12 @@ const jwt = require('jsonwebtoken');
 
 
 describe('Unit Tests', () => {
-
-  // Water
+  // Water Controller
   describe('Water Controller', () => {
     afterEach(() => {
       sinon.restore();
     });
+
     it('should get water data', async () => {
       try {
         const mockData = [
@@ -53,9 +53,26 @@ describe('Unit Tests', () => {
       }      
     });
 
+    // it('should get water data for just one person', async () => {
+    //   try{
+    //     const userId = 'user1';
+    //     const mockData = [{ date: new Date(), userId, amount: 500 }];
+    //     const req = { params: { user: userId } }; // Mock request object
+    //     const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+
+    //     const findStub = sinon.stub(Water, 'find').resolves(mockData);
+
+    //     await dataController.getWaterDataByUser(req, res);
+
+    //     assert(res.status.calledOnceWithExactly(200));
+    //     assert(res.json.calledOnceWithExactly(mockData));
+    //   } catch(error){
+    //     console.error(error); 
+    //   }
+    // });
   });
 
-  // Calorie
+  // Calorie Controller
   describe('Calorie Controller', () => {
     afterEach(() => {
       sinon.restore();
@@ -99,14 +116,32 @@ describe('Unit Tests', () => {
       }
     });
 
+    // it('should get calorie data for just one person', async () => {
+    //   try{
+    //       const userId = 'user1';
+    //       const mockData = [{ date: new Date(), userId, intake: 500 }];
+    //       const req = { params: { user: userId } }; // Mock request object
+    //       const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    
+    //       const findStub = sinon.stub(Calorie, 'find').resolves(mockData);
+    
+    //       await dataController.getCalorieDataByUser(req, res);
+    
+    //       assert(res.status.calledOnceWithExactly(200));
+    //       assert(res.json.calledOnceWithExactly(mockData));
+    //   } catch(error){
+    //     console.log(error)
+    //   }
+      
+    // });
   });
 
-  // Weight
+  // Weight Controller
   describe('Weight Controller', () => {
     afterEach(() => {
       sinon.restore();
     });
-    
+
     it('should get weight data', async () => {
       try{
           const mockData = [
@@ -142,9 +177,43 @@ describe('Unit Tests', () => {
       }
     });
 
+    // it('should get weight data for just one person', async () => {
+    //   try{
+    //     const userId = 'user1';
+    //     const mockData = [{ date: new Date(), userId, value: 70 }];
+    //     const req = { params: { user: userId } }; // Mock request object
+    //     const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+
+    //     const findStub = sinon.stub(Weight, 'find').resolves(mockData);
+
+    //     await dataController.getWeightDataByUser(req, res);
+
+    //     assert(res.status.calledOnceWithExactly(200));
+    //     assert(res.json.calledOnceWithExactly(mockData));
+    //   }catch(error){
+    //     console.log(error)
+    //   }
+    // });
+    it('should get weight data for just one person', async () => {
+      try {
+        const userId = 'user1';
+        const mockData = [{ date: new Date(), userId, value: 70 }];
+        const req = { params: { user: userId } }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub().returnsThis() }; // Use sinon.stub()
+    
+        const findStub = sinon.stub(Weight, 'find').resolves(mockData);
+    
+        await dataController.getWeightDataByUser(req, res);
+    
+        assert(res.status.calledOnceWithExactly(200));
+        assert(res.json.calledOnceWithExactly(mockData));
+      } catch (error) {
+        console.log(error);
+      }
+    });
   });
 
-  // Registration & Login
+  // Auth Controller
   describe('Auth Controller', () => {
     afterEach(() => {
       sinon.restore();
@@ -251,7 +320,6 @@ describe('Unit Tests', () => {
       assert(res.status.calledOnceWithExactly(400));
       assert(res.json.calledOnceWithExactly({ message: 'User already exists with this email' }));
     });
-
+    
   });
-
 });
