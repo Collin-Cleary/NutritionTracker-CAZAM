@@ -214,6 +214,24 @@ describe('Unit Tests', () => {
       assert(res.json.calledOnceWithExactly({ message: 'Profile created successfully' }));
     });
 
+    it('should return 400 if passwords do not match', async () => {
+      const invalidProfileData = {
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        confirmPassword: 'password456', // Different password
+        height: 180,
+        weight: 75
+      };
+      const req = { body: invalidProfileData }; // Mock request object
+      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+
+      await authController.createProfile(req, res);
+
+      assert(res.status.calledOnceWithExactly(400));
+      assert(res.json.calledOnceWithExactly({ message: 'Passwords do not match' }));
+    });
+
 
   });
 
