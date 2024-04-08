@@ -168,6 +168,20 @@ describe('Unit Tests', () => {
         console.log(error)
       }
     });
+
+    it('should return 401 for invalid credentials', () => {
+      const invalidCredentials = { userName: 'invalid_user', password: 'invalid_password' };
+      const req = { body: invalidCredentials }; // Mock request object
+      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+      sinon.stub(User, 'findOne').resolves(null);
+      sinon.stub(bcrypt, 'compare').resolves(false);
+
+      authController.login(req, res);
+
+      assert(res.status.calledOnceWithExactly(401));
+      assert(res.json.calledOnceWithExactly({ message: 'Invalid username or password' }));
+    });
+    
   });
 
 });
