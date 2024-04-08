@@ -8,7 +8,7 @@ const dataController = {};
 dataController.getWaterData = async (req, res) => {
   try {
     const data = await Water.find();
-    res.json(data);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -18,7 +18,7 @@ dataController.getWaterDataByUser = async (req, res) => {
   const name = req.params.user
   try {
     const data = await Water.find({userId: name}).sort({date: 1})
-    res.json(data)
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({message: err.message});
   }
@@ -52,7 +52,7 @@ dataController.deleteWaterData = async (req, res) => {
 dataController.getCalorieData = async (req, res) => {
   try {
     const data = await Calorie.find();
-    res.json(data);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -62,7 +62,7 @@ dataController.getCalorieDataByUser = async (req, res) => {
   const name = req.params.user
   try {
     const data = await Calorie.find({userId: name}).sort({date: 1})
-    res.json(data)
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({message: err.message});
   }
@@ -96,7 +96,7 @@ dataController.deleteCalorieData = async (req, res) => {
 dataController.getWeightData = async (req, res) => {
   try {
     const data = await Weight.find();
-    res.json(data);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -106,7 +106,7 @@ dataController.getWeightDataByUser = async (req, res) => {
   const name = req.params.user
   try {
     const data = await Weight.find({userId: name}).sort({date: 1})
-    res.json(data)
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({message: err.message});
   }
