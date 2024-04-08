@@ -125,8 +125,23 @@ describe('Unit Tests', () => {
       } catch(error){
         console.log(error)
       }
+    });
 
-      
+    it('should add weight data', async () => {
+      try{
+          const newData = { date: new Date(), userId: '1234', value: 70 };
+          const req = { body: newData }; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+          const saveStub = sinon.stub(Weight.prototype, 'save').resolves(newData);
+          await dataController.createWeightData(req, res);
+          assert(saveStub.calledOnce);
+          assert(res.status.calledOnceWithExactly(201));
+          assert(res.json.calledOnceWithExactly(newData));
+      } catch(error){
+        console.log(error)
+      }
+    });
+
   });
 
   // Registration & Login
