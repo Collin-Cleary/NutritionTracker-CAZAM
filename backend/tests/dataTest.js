@@ -181,7 +181,20 @@ describe('Unit Tests', () => {
       assert(res.status.calledOnceWithExactly(401));
       assert(res.json.calledOnceWithExactly({ message: 'Invalid username or password' }));
     });
+
+    it('should return success message for logout', () => {
+      const req = {}; // Mock request object
+      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
     
+      authController.logout(req, res);
+    
+      assert(res.status.calledOnceWithExactly(200));
+      assert(res.json.calledOnceWithExactly({ message: 'Logout successful' }));
+    });
+
+    
+
+
   });
 
 });
