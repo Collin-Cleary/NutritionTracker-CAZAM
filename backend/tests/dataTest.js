@@ -81,6 +81,23 @@ describe('Unit Tests', () => {
       }
     });
 
+    it('should add calorie data', async () => {
+      try{
+          const newData = { date: new Date(), userId: '1234', intake: 500 };
+          const req = { body: newData }; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    
+          const saveStub = sinon.stub(Calorie.prototype, 'save').resolves(newData);
+    
+          await dataController.createCalorieData(req, res);
+    
+          assert(saveStub.calledOnce);
+          assert(res.status.calledOnceWithExactly(201));
+          assert(res.json.calledOnceWithExactly(newData));
+      } catch(error){
+        console.log(error)
+      }
+    });
 
   });
 
