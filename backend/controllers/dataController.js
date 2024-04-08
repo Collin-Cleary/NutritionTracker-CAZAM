@@ -2,7 +2,7 @@ const Water = require('../models/waterModel');
 const Calorie = require('../models/calorieModel');
 const Weight = require('../models/weightModel');
 const {FoodItem, deleteFoodItem, createFoodItem, getFoodItem} = require('../models/foodItemModel');
-const {FoodEntry, deleteFoodEntry, createFoodEntryData, getFoodEntryData} = require('../models/foodEntryModel')
+const {FoodEntry, deleteFoodEntry, createFoodEntry, getFoodEntry} = require('../models/foodEntryModel')
 const dataController = {};
 
 // Water controller methods
@@ -109,33 +109,18 @@ dataController.deleteWeightData = async (req, res) => {
 
 // Food Entry controller methods
 dataController.getFoodEntryData = async (req, res) => {
-  result = await getFoodEntryData(req.query)
+  result = await getFoodEntry(req.query)
   res.status(result.status).json(result.json)
 };
 
 dataController.createFoodEntryData = async (req, res) => {
-  const foodEntry = new FoodEntry({
-    date: req.body.date,
-    name: req.body.name,
-    parts: req.body.parts,
-    userID : req.body.userId
-  });
-
-  try {
-    const newFoodEntry = await foodEntry.save();
-    res.status(201).json(newFoodEntry);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+  result = await createFoodEntry(req.body.date, req.body.name, req.body.parts, req.body.userId)
+  res.status(result.status).json(result.json)
 };
 
 dataController.deleteFoodEntryData = async (req, res) => {
-  try {
-    await FoodEntry.findByIdAndDelete(req.params.id);
-    res.status(204).json({ message: 'Food Entry data deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  result = await deleteFoodEntry(req.params.id)
+  res.status(result.status).json(result.json)
 };
 
 // Food Item controller methods

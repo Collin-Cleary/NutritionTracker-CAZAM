@@ -20,7 +20,7 @@ async function deleteFoodEntry(id) {
   }
 }
 
-async function createFoodEntryData(date, name, parts, userId) {
+async function createFoodEntry(date, name, parts, userId) {
   const fe = new FoodEntry({
     date : date,
     name : name,
@@ -36,7 +36,7 @@ async function createFoodEntryData(date, name, parts, userId) {
   }
 }
 
-async function getFoodEntryData(query) {
+async function getFoodEntry(query) {
   try {
     let data = await FoodEntry.find(query).populate('parts').exec()
     return {status : 200, json : data}
@@ -46,4 +46,4 @@ async function getFoodEntryData(query) {
 }
 
 
-module.exports = {FoodEntry, deleteFoodEntry, createFoodEntryData, getFoodEntryData};
+module.exports = {FoodEntry, deleteFoodEntry, createFoodEntry, getFoodEntry};
