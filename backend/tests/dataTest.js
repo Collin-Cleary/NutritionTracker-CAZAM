@@ -102,6 +102,32 @@ describe('Unit Tests', () => {
   });
 
   // Weight
+  describe('Weight Controller', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+    
+    it('should get weight data', async () => {
+      try{
+          const mockData = [
+            { date: new Date(), userId: '123', value: 70 },
+            { date: new Date(), userId: '456', value: 65 },
+          ];
+          const req = {}; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    
+          const findStub = sinon.stub(Weight, 'find').resolves(mockData);
+    
+          await dataController.getWeightData(req, res);
+    
+          assert(res.status.calledOnceWithExactly(200));
+          assert(res.json.calledOnceWithExactly(mockData));
+      } catch(error){
+        console.log(error)
+      }
+
+      
+  });
 
   // Registration & Login
 
