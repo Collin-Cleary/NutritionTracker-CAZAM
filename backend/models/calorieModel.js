@@ -13,7 +13,7 @@ const Calorie = mongoose.model('Calorie', calorieSchema);
 async function deleteCalorieItem(id) {
   try{
     await Calorie.findByIdAndDelete(id)
-    return {status : 204, json : {message : "Food Item Data Deleted Succesfully"}}
+    return {status : 204, json : {message : "Calorie Item Data Deleted Succesfully"}}
   } catch (err) {
     return {status : 500, json : {message : err.message}}
   }
