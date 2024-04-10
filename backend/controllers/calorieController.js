@@ -16,3 +16,5 @@ calorieController.deleteCalorieItemData = async (req, res) => {
   result = await deleteCalorieItem(req.params.id)
   res.status(result.status).json(result.json)
 }; 
+
+module.exports = calorieController

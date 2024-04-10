@@ -16,3 +16,5 @@ foodEntryController.deleteFoodEntryData = async (req, res) => {
   result = await deleteFoodEntry(req.params.id)
   res.status(result.status).json(result.json)
 }; 
+
+module.exports = foodEntryController

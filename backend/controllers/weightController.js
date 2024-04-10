@@ -16,3 +16,5 @@ weightController.deleteWeightItemData = async (req, res) => {
   result = await deleteWeightItem(req.params.id)
   res.status(result.status).json(result.json)
 }; 
+
+module.exports = weightController

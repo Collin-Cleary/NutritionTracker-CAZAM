@@ -16,3 +16,5 @@ waterController.deleteWaterItemData = async (req, res) => {
   result = await deleteWaterItem(req.params.id)
   res.status(result.status).json(result.json)
 }; 
+
+module.exports = waterController
