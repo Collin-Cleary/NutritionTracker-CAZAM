@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha tests/*.test.js --exit --trace-warnings"
+  },
+  "dependencies": {
+    "mocha": "^10.4.0",
+    "sinon": "^17.0.1"
+  }
+}
