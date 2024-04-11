@@ -56,10 +56,10 @@ describe('foodEntryController', function() {
       json: sinon.spy()
     };
 
-    const createFoodEntryStub = sinon.stub(FoodEntryModule, 'deleteFoodEntry').returns({ status: 200, json: "deleted" });
+    const deleteFoodEntryStub = sinon.stub(FoodEntryModule, 'deleteFoodEntry').returns({ status: 200, json: "deleted" });
     await foodEntryController.deleteFoodEntryData(req, res);
 
-    sinon.assert.calledOnceWithExactly(createFoodEntryStub, req.params.id);
+    sinon.assert.calledOnceWithExactly(deleteFoodEntryStub, req.params.id);
     sinon.assert.calledWith(res.status, 200);
     sinon.assert.calledWith(res.json, "deleted");
   });
