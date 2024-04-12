@@ -1,6 +1,8 @@
 const Water = require('../models/waterModel');
 const Calorie = require('../models/calorieModel');
 const Weight = require('../models/weightModel');
+const FoodEntry = require('../models/foodEntryModel');
+const FoodItem = require('../models/foodItemModel');
 
 const dataController = {};
 
@@ -135,5 +137,79 @@ dataController.deleteWeightData = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Food Entry controller methods
+dataController.getFoodEntryData = async (req, res) => {
+  try {
+    const data = await FoodEntry.find();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+dataController.createFoodEntryData = async (req, res) => {
+  const foodEntry = new FoodEntry({
+    date: req.body.date,
+    name: req.body.name,
+    parts: req.body.parts,
+    userID : req.body.userId
+  });
+
+  try {
+    const newFoodEntry = await foodEntry.save();
+    res.status(201).json(newFoodEntry);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+dataController.deleteFoodEntryData = async (req, res) => {
+  try {
+    await FoodEntry.findByIdAndDelete(req.params.id);
+    res.status(204).json({ message: 'Food Entry data deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Food Item controller methods
+dataController.getFoodItemData = async (req, res) => {
+  try {
+    query = {}
+    query[req.header("field")] = req.header("value")
+    const data = await FoodItem.find(query);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+dataController.createFoodItemData = async (req, res) => {
+  const foodItem = new FoodItem({
+    nutrition : req.body.nutrition,
+    name : req.body.name,
+    ingredients : req.body.ingredients,
+    userId: req.body.userId
+  });
+
+  try {
+    const newFoodItem = await foodItem.save();
+    res.status(201).json(newFoodItem);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+dataController.deleteFoodItemData = async (req, res) => {
+  try {
+    await FoodItem.findByIdAndDelete(req.params.id);
+    res.status(204).json({ message: 'Food Item data deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 
 module.exports = dataController;

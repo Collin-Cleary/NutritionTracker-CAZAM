@@ -10,7 +10,6 @@ const foodEntrySchema = new mongoose.Schema({
 
 const FoodEntry = mongoose.model('FoodEntry', foodEntrySchema);
 
-
 async function deleteFoodEntry(id) {
   try{
     await FoodEntry.findByIdAndDelete(id)

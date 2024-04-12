@@ -11,6 +11,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
+
 describe('Unit Tests', () => {
 
   // Water
@@ -70,6 +71,7 @@ describe('Unit Tests', () => {
     });
 
     
+
 
     it('should add water data', async () => {
       try{
@@ -335,6 +337,7 @@ describe('Unit Tests', () => {
     });
 
   });
+
 
   // Registration & Login
   describe('Login API', () => {
