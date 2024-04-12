@@ -1,0 +1,5 @@
+[
+    { "nutrition": {"vitamin C" : 20, "iron" : 2}, "name": "baked potatoes", "ingredients": "potatoes cheese" ,"userId" : "user1"},
+    { "nutrition": {"vitamin B" : 20, "iron" : 2}, "name": "cereal", "ingredients": "cereal, milk" ,"userId" : "user1"},
+    { "nutrition": {"vitamin C" : 20, "iron" : 2}, "name": "baked potatoes", "ingredients": "potatoes cheese" ,"userId" : "user2"}
+]

@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "actions" ,"refactoring-tests-controllers-and-models" ]
+    branches: [ "main", "actions" , "refactoring-tests-controllers-and-models" ]
   pull_request:
     branches: [ "main" ]
 
@@ -30,14 +30,14 @@ jobs:
     - name: Install dependencies
       run: npm install
       working-directory: backend
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.10.0
-      with:
-        mongodb-version: ${{ matrix.mongodb-version }}
     - run: npm run build --if-present
       working-directory: backend
     - run: npm test -- --coverage
       working-directory: backend
+    - run: npm install
+      working-directory: frontend
+    - run: npm test -- --coverage
+      working-directory: frontend
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       with:
