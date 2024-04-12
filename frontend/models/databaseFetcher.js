@@ -18,6 +18,7 @@ class FoodSearch {
       console.log("2")
       const response = await fetch(databaseURL+`?${queryString}`)
       console.log("3")
+      console.log(response.status)
       if (!response.ok){
         throw new Error("Failed to Fetch data")
       }
