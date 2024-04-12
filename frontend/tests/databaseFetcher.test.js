@@ -11,9 +11,9 @@ describe("databaseFetcher", () => {
 
 
   it('should properly form query and assign results', async () => {
-    const expQuery = new Date()
+    const expQuery = "cheddar,cheese"
     const expPageNumber = 123;
-    const expSortBy= [{ nutrients: { protein: 20, carbs: 30 } }, {nutrients : {protein : 40, "Vitamin A" : 10}}];
+    const expSortBy= "publishedDate";
     const expResponse = [{exampleResponse : "some foods"}]
     const fetchStub = sinon.stub(global, 'fetch').resolves(Response.json(expResponse))
 
