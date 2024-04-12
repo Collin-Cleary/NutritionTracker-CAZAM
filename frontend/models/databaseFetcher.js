@@ -16,6 +16,7 @@ class FoodSearch {
     console.log("1")
     try {
       console.log("2")
+      console.log(databaseURL+`?${queryString}`)
       const response = await fetch(databaseURL+`?${queryString}`)
       console.log("3")
       console.log(response.status)
