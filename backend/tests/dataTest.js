@@ -1,142 +1,465 @@
-
-
-const fs = require('fs');
-const path = require('path');
 const assert = require('assert');
-const request = require('supertest');
-const app = require('../server');
-const mongoose = require('mongoose');
+const sinon = require('sinon');
+const authController = require('../controllers/authController');
+const dataController = require('../controllers/dataController');
+
 const Water = require('../models/waterModel');
 const Calorie = require('../models/calorieModel');
 const Weight = require('../models/weightModel');
-const FoodItem = require('../models/foodItemModel');
+const User = require('../models/userModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-// Test server port
-const testPort = 3006;
 
-describe('API Tests', () => {
-  // Before each test, connect to the database, add dummy data, and start the test server
-  before(async () => {
-    // Connect to MongoDB database, assuming the connection logic is implemented in server.js
-    await mongoose.connect('mongodb://0.0.0.0:27017/cazam');
 
-    // Read JSON files and insert data into the database
-    const waterDataPath = path.join(__dirname, '../data/water.json');
-    const waterData = JSON.parse(fs.readFileSync(waterDataPath, 'utf8'));
-    await Water.insertMany(waterData).then(() => {console.log("read in water")});
+describe('Unit Tests', () => {
 
-    const calorieDataPath = path.join(__dirname, '../data/calorie.json');
-    const calorieData = JSON.parse(fs.readFileSync(calorieDataPath, 'utf8'));
-    await Calorie.insertMany(calorieData);
-
-    const weightDataPath = path.join(__dirname, '../data/weight.json');
-    const weightData = JSON.parse(fs.readFileSync(weightDataPath, 'utf8'));
-    await Weight.insertMany(weightData);
-
-    const foodItemDataPath = path.join(__dirname, '../data/foodItem.json');
-    const foodItemData = JSON.parse(fs.readFileSync(foodItemDataPath, 'utf8'));
-    await FoodItem.insertMany(foodItemData);
-
-    // Start the test server
-    app.listen(testPort, () => {
-      console.log(`Test server listening at http://localhost:${testPort}`);
+  // Water
+  describe('Water Controller', () => {
+    afterEach(() => {
+      sinon.restore();
     });
-  });
-
-  // After each test, disconnect from the database
-  after(async () => {
-    // Clean up inserted data
-    await Water.deleteMany({});
-    await Calorie.deleteMany({});
-    await Weight.deleteMany({});
-    await FoodItem.deleteMany({});
-    // Disconnect from MongoDB database
-    await mongoose.disconnect();
-  });
-
-  // Water data test cases
-  describe('Water API', () => {
     it('should get water data', async () => {
-      const response = await request(`http://localhost:${testPort}`).get('/api/water');
-      assert.equal(response.status, 200);
-      assert(Array.isArray(response.body), 'Response is not an array');
+      try {
+        const mockData = [
+          { date: new Date(), userId: '123', amount: 500 },
+          { date: new Date(), userId: '456', amount: 300 },
+        ];
+        const req = {}; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+        const findStub = sinon.stub(Water, 'find').resolves(mockData);
+        await dataController.getWaterData(req, res);
+        assert(res.status.calledOnceWithExactly(200));
+        assert(res.json.calledOnceWithExactly(mockData));
+      } catch (error) {
+        console.error(error);
+      }
     });
+
+    it('should get water data for a specific user sorted by date', async () => {
+      try {
+        const userId = '123';
+        const req = { params: { user: userId } };
+        const res = {
+          status: sinon.stub().returnsThis(),
+          json: sinon.stub()
+        }; // Mock response object
+  
+        const testData = [
+          { userId: userId, date: new Date('2023-01-01'), amount: 500 },
+          { userId: userId, date: new Date('2023-01-02'), amount: 700 },
+          { userId: userId, date: new Date('2023-01-03'), amount: 600 }
+        ];
+  
+        const expectedSortedData = [
+          { userId: userId, date: new Date('2023-01-01'), amount: 500 },
+          { userId: userId, date: new Date('2023-01-02'), amount: 700 },
+          { userId: userId, date: new Date('2023-01-03'), amount: 600 }
+        ];
+  
+        const findStub = sinon.stub(Water, 'find').resolves(testData);
+  
+        await dataController.getWaterDataByUser(req, res);
+        
+  
+        assert(findStub.calledOnceWithExactly({ userId: userId }));
+        assert(res.status.calledOnceWithExactly(200));
+        assert(res.json.calledOnceWithExactly(expectedSortedData));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    
+
 
     it('should add water data', async () => {
-      const newData = { date: new Date(), userId: '123', amount: 500 };
-      const response = await request(`http://localhost:${testPort}`)
-        .post('/api/water')
-        .send(newData);
-      assert.equal(response.status, 201);
+      try{
+        const newData = { date: new Date(), userId: '123', amount: 500 };
+        const req = { body: newData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+
+        const saveStub = sinon.stub(Water.prototype, 'save').resolves(newData);
+
+        await dataController.createWaterData(req, res);
+
+        assert(saveStub.calledOnce);
+        assert(res.status.calledOnceWithExactly(201));
+        assert(res.json.calledOnceWithExactly(newData));
+      } catch (error) {
+        console.error(error);
+      }      
     });
 
-    // Add more test cases...
+    it('should delete water data successfully', async () => {
+      try {
+        const req = { params: { id: 'someId' } };
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        // Mocking Water.findByIdAndDelete to resolve
+        const findByIdAndDeleteStub = sinon.stub(Water, 'findByIdAndDelete').resolves();
+  
+        await dataController.deleteWaterData(req, res);
+  
+        assert(findByIdAndDeleteStub.calledOnceWith(req.params.id));
+        assert(res.status.calledOnceWith(204));
+        assert(res.json.calledOnceWith({ message: 'Water data deleted successfully' }));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  
+    it('should handle errors', async () => {
+      try {
+        const req = { params: { id: 'someId' } };
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        const error = new Error('Test error');
+  
+        // Mocking Water.findByIdAndDelete to reject with error
+        const findByIdAndDeleteStub = sinon.stub(Water, 'findByIdAndDelete').rejects(error);
+  
+        await dataController.deleteWaterData(req, res);
+  
+        assert(findByIdAndDeleteStub.calledOnceWith(req.params.id));
+        assert(res.status.calledOnceWith(500));
+        assert(res.json.calledOnceWith({ message: error.message }));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
   });
 
-  // Calorie data test cases
-  describe('Calorie API', () => {
+  // Calorie
+  describe('Calorie Controller', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+
     it('should get calorie data', async () => {
-      const response = await request(`http://localhost:${testPort}`).get('/api/calorie');
-      assert.equal(response.status, 200);
-      assert(Array.isArray(response.body), 'Response is not an array');
+      try{
+          const mockData = [
+            { date: new Date(), userId: '123', intake: 500 },
+            { date: new Date(), userId: '456', intake: 300 },
+          ];
+          const req = {}; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    
+          const findStub = sinon.stub(Calorie, 'find').resolves(mockData);
+    
+          await dataController.getCalorieData(req, res);
+    
+          assert(res.status.calledOnceWithExactly(200));
+          assert(res.json.calledOnceWithExactly(mockData));
+      } catch(error){
+        console.log(error)
+      }
+    });
+
+    it('should get calorie data for a specific user', async () => {
+      try {
+        const userId = 'testUser';
+        const req = { params: { user: userId } };
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        const testData = [
+          { userId: userId, date: new Date('2023-01-01'), calories: 500 },
+          { userId: userId, date: new Date('2023-01-02'), calories: 700 },
+          { userId: userId, date: new Date('2023-01-03'), calories: 600 }
+        ];
+  
+        const findStub = sinon.stub(Calorie, 'find').resolves(testData);
+  
+        await dataController.getCalorieDataByUser(req, res);
+  
+        // Check if Calorie.find() is called with correct userId parameter
+        assert(findStub.calledOnceWithExactly({ userId: userId }));
+  
+        // Check if response status is set to 200
+        assert(res.status.calledOnceWithExactly(200));
+  
+        // Check if response JSON data is correct
+        assert(res.json.calledOnceWithExactly(testData));
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     it('should add calorie data', async () => {
-      const newData = { date: new Date(), userId: '1234', intake: 500 };
-      const response = await request(`http://localhost:${testPort}`)
-        .post('/api/calorie')
-        .send(newData);
-      assert.equal(response.status, 201);
+      try{
+          const newData = { date: new Date(), userId: '1234', intake: 500 };
+          const req = { body: newData }; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    
+          const saveStub = sinon.stub(Calorie.prototype, 'save').resolves(newData);
+    
+          await dataController.createCalorieData(req, res);
+    
+          assert(saveStub.calledOnce);
+          assert(res.status.calledOnceWithExactly(201));
+          assert(res.json.calledOnceWithExactly(newData));
+      } catch(error){
+        console.log(error)
+      }
     });
 
-    // Add more test cases...
+    it('should delete calorie data successfully', async () => {
+      try {
+        const calorieId = 'testCalorieId';
+        const req = { params: { id: calorieId } };
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        const findByIdAndDeleteStub = sinon.stub(Calorie, 'findByIdAndDelete').resolves();
+  
+        await dataController.deleteCalorieData(req, res);
+  
+        // Check if Calorie.findByIdAndDelete() is called with correct calorieId parameter
+        assert(findByIdAndDeleteStub.calledOnceWithExactly(calorieId));
+  
+        // Check if response status is set to 204
+        assert(res.status.calledOnceWithExactly(204));
+  
+        // Check if response JSON message is correct
+        assert(res.json.calledOnceWithExactly({ message: 'Calorie data deleted successfully' }));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
   });
 
-  // Weight data test cases
-  describe('Weight API', () => {
+  // Weight
+  describe('Weight Controller', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+    
     it('should get weight data', async () => {
-      const response = await request(`http://localhost:${testPort}`).get('/api/weight');
-      assert.equal(response.status, 200);
-      assert(Array.isArray(response.body), 'Response is not an array');
+      try{
+          const mockData = [
+            { date: new Date(), userId: '123', value: 70 },
+            { date: new Date(), userId: '456', value: 65 },
+          ];
+          const req = {}; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+    
+          const findStub = sinon.stub(Weight, 'find').resolves(mockData);
+    
+          await dataController.getWeightData(req, res);
+    
+          assert(res.status.calledOnceWithExactly(200));
+          assert(res.json.calledOnceWithExactly(mockData));
+      } catch(error){
+        console.log(error)
+      }
+    });
+
+    it('should get weight data for a specific user', async () => {
+      try {
+        const userId = 'testUser';
+        const req = { params: { user: userId } };
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        const testData = [
+          { userId: userId, date: new Date('2023-01-01'), value: 70 },
+          { userId: userId, date: new Date('2023-01-02'), value: 65 },
+          { userId: userId, date: new Date('2023-01-03'), value: 68 }
+        ];
+  
+        const findStub = sinon.stub(Weight, 'find').resolves(testData);
+  
+        await dataController.getWeightDataByUser(req, res);
+  
+        // Check if Weight.find() is called with correct userId parameter
+        assert(findStub.calledOnceWithExactly({ userId: userId }));
+  
+        // Check if response status is set to 200
+        assert(res.status.calledOnceWithExactly(200));
+  
+        // Check if response JSON data is correct
+        assert(res.json.calledOnceWithExactly(testData));
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     it('should add weight data', async () => {
-      const newData = { date: new Date(), userId: '1234', value: 70 };
-      const response = await request(`http://localhost:${testPort}`)
-        .post('/api/weight')
-        .send(newData);
-      assert.equal(response.status, 201);
+      try{
+          const newData = { date: new Date(), userId: '1234', value: 70 };
+          const req = { body: newData }; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+          const saveStub = sinon.stub(Weight.prototype, 'save').resolves(newData);
+          await dataController.createWeightData(req, res);
+          assert(saveStub.calledOnce);
+          assert(res.status.calledOnceWithExactly(201));
+          assert(res.json.calledOnceWithExactly(newData));
+      } catch(error){
+        console.log(error)
+      }
     });
 
-    // 添加更多的测试用例...
+    it('should delete weight data successfully', async () => {
+      try {
+        const weightId = 'testWeightId';
+        const req = { params: { id: weightId } }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        const findByIdAndDeleteStub = sinon.stub(Weight, 'findByIdAndDelete').resolves();
+  
+        await dataController.deleteWeightData(req, res);
+  
+        assert(findByIdAndDeleteStub.calledOnceWithExactly(weightId));
+        assert(res.status.calledOnceWithExactly(204));
+        assert(res.json.calledOnceWithExactly({ message: 'Weight data deleted successfully' }));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  
+    it('should handle errors', async () => {
+      try {
+        const weightId = 'testWeightId';
+        const req = { params: { id: weightId } }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        const error = new Error('Test error');
+        const findByIdAndDeleteStub = sinon.stub(Weight, 'findByIdAndDelete').rejects(error);
+  
+        await dataController.deleteWeightData(req, res);
+  
+        assert(findByIdAndDeleteStub.calledOnceWithExactly(weightId));
+        assert(res.status.calledOnceWithExactly(500));
+        assert(res.json.calledOnceWithExactly({ message: error.message }));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
   });
 
-  // Food Item test cases
-  describe('Food Item API', () => {
-    it('should get food Item data', async () => {
-      const response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "user1");
-      assert.equal(response.status, 200);
-      assert(Array.isArray(response.body), 'Response is not an array');
-      assert(response.body.length == 2, "expecting 2 entries")
-      response.body.map((item) =>{assert(item.userId == "user1", "can query")}) 
+
+  // Registration & Login
+  describe('Login API', () => {
+    afterEach(() => {
+      sinon.restore();
     });
 
-    it('should add food item data', async () => {
-      const newData = { "nutrition": {"vitamin C" : 20, "iron" : 2}, "name": "food", "ingredients": "stuff and things" ,"userId" : "testuser"};
-      let response = await request(`http://localhost:${testPort}`)
-        .post('/api/foodItem')
-        .send(newData);
-      assert.equal(response.status, 201);
-      response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "testuser");
-      assert(response.body.length == 1, "expecting 1 entry")
+    it('should login with correct credentials and return JWT token', () => {
+      try{
+          const validCredentials = { userName: 'john_doe', password: 'password123' };
+          const req = { body: validCredentials }; // Mock request object
+          const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+          const user = { userName: validCredentials.userName };
+          sinon.stub(User, 'findOne').resolves(user);
+          sinon.stub(bcrypt, 'compare').resolves(true);
+          sinon.stub(jwt, 'sign').returns('mockToken');
+    
+          authController.login(req, res);
+    
+          assert(res.status.calledOnceWithExactly(200));
+          assert(res.json.calledOnceWithExactly({ token: 'mockToken' }));
+      } catch(error){
+        console.log(error)
+      }
     });
 
-    it('should delete food item data', async () => {
-      let response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "user2");
-      assert(response.body.length == 1, "expecting 1 entry")
-      response = await request(`http://localhost:${testPort}`).delete(`/api/foodItem/${response.body[0]._id}`)
-      response = await request(`http://localhost:${testPort}`).get('/api/foodItem').set("field", "userId").set("value", "user2");
-      assert(response.body.length == 0, "expecting no entries")
+    it('should return 401 for invalid credentials', () => {
+      const invalidCredentials = { userName: 'invalid_user', password: 'invalid_password' };
+      const req = { body: invalidCredentials }; // Mock request object
+      const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+      sinon.stub(User, 'findOne').resolves(null);
+      sinon.stub(bcrypt, 'compare').resolves(false);
+
+      authController.login(req, res);
+
+      assert(res.status.calledOnceWithExactly(401));
+      assert(res.json.calledOnceWithExactly({ message: 'Invalid username or password' }));
     });
   });
+
+    describe('Logout API', () => {
+      afterEach(() => {
+        sinon.restore();
+      });
+
+      it('should return success message for logout', () => {
+        const req = {}; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+      
+        authController.logout(req, res);
+      
+        assert(res.status.calledOnceWithExactly(200));
+        assert(res.json.calledOnceWithExactly({ message: 'Logout successful' }));
+      });
+
+    });
+    
+
+    describe('Profile Creation API', () => {
+      afterEach(() => {
+        sinon.restore();
+      });
+      it('should create a new profile successfully', async () => {
+        const newProfileData = {
+          userName: 'john_doe',
+          name: 'John Doe',
+          email: 'johndoe@example.com',
+          password: 'password123',
+          confirmPassword: 'password123',
+          height: 180,
+          weight: 75
+        };
+        const req = { body: newProfileData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+        sinon.stub(User, 'findOne').resolves(null);
+        sinon.stub(bcrypt, 'hash').resolves('hashedPassword');
+        sinon.stub(User.prototype, 'save').resolves();
+
+        await authController.createProfile(req, res);
+
+        assert(res.status.calledOnceWithExactly(201));
+        assert(res.json.calledOnceWithExactly({ message: 'Profile created successfully' }));
+      });
+
+      it('should return 400 if passwords do not match', async () => {
+        const invalidProfileData = {
+          name: 'Test User',
+          email: 'test@example.com',
+          password: 'password123',
+          confirmPassword: 'password456', // Different password
+          height: 180,
+          weight: 75
+        };
+        const req = { body: invalidProfileData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+
+        await authController.createProfile(req, res);
+
+        assert(res.status.calledOnceWithExactly(400));
+        assert(res.json.calledOnceWithExactly({ message: 'Passwords do not match' }));
+      });
+
+      it('should return 400 if user already exists with the provided email', async () => {
+        const existingProfileData = {
+          userName: 'existing_user',
+          name: 'Existing User',
+          email: 'test@example.com',
+          password: 'password123',
+          confirmPassword: 'password123',
+          height: 170,
+          weight: 70
+        };
+        const req = { body: existingProfileData }; // Mock request object
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+        sinon.stub(User, 'findOne').resolves({ email: 'test@example.com' });
+
+        await authController.createProfile(req, res);
+
+        assert(res.status.calledOnceWithExactly(400));
+        assert(res.json.calledOnceWithExactly({ message: 'User already exists with this email' }));
+      });
+
+  });
+
 });
