@@ -1,7 +1,7 @@
 const assert = require('assert')
 const sinon = require('sinon')
 const NutrientBreakdown = require('../models/nutrientBreakdown')
-
+const fetchMock = require('fetch-mock')
 
 describe("nutrientBreakdown", () => {
 
@@ -14,18 +14,20 @@ describe("nutrientBreakdown", () => {
     const expDate = new Date()
     const expUserId = 123;
     const expFoodEntries = [{ nutrients: { protein: 20, carbs: 30 } }, {nutrients : {protein : 40, "Vitamin A" : 10}}];
-    const fetchStub = sinon.stub(global, 'fetch').resolves(Response.json(expFoodEntries))
-
+    fetchMock.get("http://localhost:3000/api/foodentry"+`?${queryString = new URLSearchParams({date : expDate, userId : expUserId}).toString()}`, expFoodEntries);
+    
     const nb = new NutrientBreakdown()
     await nb.fetchForDate(expDate, expUserId)
 
-    sinon.assert.calledOnceWithExactly(fetchStub, "http://localhost:3000/api/foodentry"+`?${new URLSearchParams({date : expDate, userId : expUserId}).toString()}`)
+    assert.equal(fetchMock.done(), true)
     assert.deepEqual(nb.foodEntries, expFoodEntries);
   });
 
   it('should properly handle errors', async () => {
-    const expFoodEntries = [{ nutrients: { protein: 20, carbs: 30 } }, {nutrients : {protein : 40, "Vitamin A" : 10}}];
-    const fetchStub = sinon.stub(global, 'fetch').resolves(Response.json(expFoodEntries, {status : 400}))
+    fetchMock.get('*', {
+      body: {example : "example"},
+      status: 400
+    })
     const errorStub = sinon.stub(console, 'error').returns()
     const nb = new NutrientBreakdown()
     await nb.fetchForDate(12, 123)
