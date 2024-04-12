@@ -20,6 +20,7 @@ describe("databaseFetcher", () => {
     const fs = new FoodSearch()
     await fs.fetchForData(expQuery, expPageNumber, expSortBy)
 
+    console.log(fetchStub.getCall(0).args)
     sinon.assert.calledOnceWithExactly(fetchStub, "https://api.nal.usda.gov/fdc/v1/foods/search"+`?${new URLSearchParams({api_key : "DEMO_KEY", query : expQuery, pageNumber : expPageNumber, sortBy : expSortBy}).toString()}`)
     assert.deepEqual(fs.searchResults, expResponse);
   });
