@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "actions" ]
+    branches: [ "main", "actions" ,"refactoring-tests-controllers-and-models" ]
   pull_request:
     branches: [ "main" ]
 
@@ -43,6 +43,7 @@ jobs:
       with:
         token: c4e18c22-d208-45b8-b6c3-7e683743cfa6
         slug: Collin-Cleary/NutritionTracker-CAZAM
+      
 
   
           
