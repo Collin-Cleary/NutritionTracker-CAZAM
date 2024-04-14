@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import './App.css';
+import FoodItems from './FoodItems';
 import DietTracker from './DietTracker'
 
 function Home(props) {
@@ -14,7 +15,8 @@ function Home(props) {
 
     const renderTabContent = () => {
       switch (selectedTab) {
-        
+        case 'FoodItems':
+          return <FoodItems/>;
         case 'DietTracker':
           return <DietTracker/>;
         default:
