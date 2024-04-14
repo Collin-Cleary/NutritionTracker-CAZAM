@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import './App.css';
+import DietTracker from './DietTracker'
 
 function Home(props) {
   const [username] = useState('Zaige Shi');
@@ -11,7 +12,15 @@ function Home(props) {
       setSelectedTab(tab);
     };
 
-    
+    const renderTabContent = () => {
+      switch (selectedTab) {
+        
+        case 'DietTracker':
+          return <DietTracker/>;
+        default:
+          return null;
+      }
+    };
 
   const buttons = document.querySelectorAll("Home-nav button");
   buttons.forEach((button) => {
