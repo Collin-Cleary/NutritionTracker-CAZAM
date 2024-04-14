@@ -8,6 +8,10 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+[badge3 for SonarCloud]
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=Collin-Cleary_NutritionTracker-CAZAM)](https://sonarcloud.io/summary/new_code?id=Collin-Cleary_NutritionTracker-CAZAM)
+
 Nutrition Tracker is a web app where account holders can track their meals, nutrition details, calorie count, water intake, and weight.
 
 
