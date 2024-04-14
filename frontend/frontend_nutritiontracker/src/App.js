@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Login from './Login';
+import Home from './Home';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,7 +34,7 @@ function App() {
         </div>
       </header>
 
-              <Login/>
+      {isLoggedIn ? <Home /> : <Login handleLogin={handleLogin} />}
 
       <footer>
         <p>Group-3</p>
