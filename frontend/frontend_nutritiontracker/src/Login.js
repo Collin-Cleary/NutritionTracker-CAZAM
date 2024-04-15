@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import './App.css';
+
 
 function Login(props) {
   const [isCreatingAccount, setCreatingAccount] = useState(false);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleForm = () => {
     setCreatingAccount(!isCreatingAccount);
   };
 
-  const login = (id , password) => {
-    console.log(id, password)
-      
+  const login = async (id , password) => {
+    try{
+        const response = await axios.post('http://localhost:5000/auth/login', {
+        userName: id,
+        password: password
+    });
+    const token = response.data.token;
+    localStorage.setItem('userName', id);
+    localStorage.setItem('access_token', token); // Store token in localStorage
+    setIsLoggedIn(true);
+    window.location.reload();
+    } catch (error){
+        console.error('Error logging in:', error);
+    }      
   }
   const handleLogin= (e) => {
     login(id, password);
@@ -28,7 +43,7 @@ function Login(props) {
             {!isCreatingAccount && (
               <div>
                 <div className="form-group">
-                  <input type="id" placeholder="Enter your id" value={id} onChange={(e) => setId(e.target.value)} required/>
+                  <input type="id" placeholder="Enter your username" value={id} onChange={(e) => setId(e.target.value)} required/>
                 </div>
                 <div className="form-group">
                   <input type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required/>

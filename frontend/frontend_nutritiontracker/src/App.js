@@ -1,49 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Login from './Login';
 import Home from './Home';
 import axios from "axios";
-import {findAllByPlaceholderText} from "@testing-library/react";
 
 const baseUrl = "http://localhost:5000";
 
-const checkSession = () => {
-  return new Promise((resolve, reject) => {
-    const data = {
-      "id": localStorage.getItem('id'),
-      "access_token": localStorage.getItem('access_token')
-    };
-
-    axios.post(`${baseUrl}/auth/check_session`, JSON.stringify(data), {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-        .then(response => {
-          if (response.data.session_active) {
-            console.log('User already logged in');
-            resolve(true);
-          } else {
-            console.log('User logged out');
-            resolve(false);
-          }
-        })
-        .catch(error => {
-          console.log(`Error fetching data from the server: `, error);
-          resolve(false);
-        });
-  });
-}
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  checkSession().then(sessionActive => {
-    console.log(sessionActive);
-    setIsLoggedIn(sessionActive);
-  });
+
+  
+  useEffect(() => {
+    const checkSession = async () => {
+      try{
+        const token = localStorage.getItem('access_token');
+        const userName = localStorage.getItem('userName');
+        if (token && userName) {
+          setIsLoggedIn(true);
+        }       
+      } catch(error){
+        console.log('Error checking session:', error);
+      } 
+    };
+
+    checkSession();
+  },[]);
+
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
+
+  
   const logout = () => {
     axios.post(
         `${baseUrl}/auth/logout`,
@@ -59,7 +46,6 @@ function App() {
             console.log('User logged out successfully');
             localStorage.removeItem('access_token');
             setIsLoggedIn(false);
-            console.log('LOGGED OUT');
           } else {
             console.log('User logout failed');
           }
