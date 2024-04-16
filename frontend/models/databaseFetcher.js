@@ -5,10 +5,6 @@ const databaseURL = "https://api.nal.usda.gov/fdc/v1/foods/search"
 const key = "DEMO_KEY"
 
 class FoodSearch {
-
-  constructor() {
-
-  }
   
   async fetchForData(query, pageNumber, sortBy) {
     const queryString = new URLSearchParams({api_key : key, query : query, pageNumber : pageNumber, sortBy : sortBy}).toString();

@@ -10,10 +10,6 @@ const reccomendedAmounts = {
 
 class NutrientBreakdown {
 
-  constructor() {
-
-  }
-
   async fetchForDate(date, userId) {
     const queryString = new URLSearchParams({date : date, userId : userId}).toString();
     let foodentries = []
