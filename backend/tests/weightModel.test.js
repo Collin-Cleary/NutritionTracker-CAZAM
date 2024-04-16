@@ -16,7 +16,7 @@ describe('Weight Model', () => {
       ];
       const findstub = sinon.stub(Weight, 'find').resolves(mockData);
       let query = {userId : "user3"}
-      result = await getWeightItems(query);
+      const result = await getWeightItems(query);
 
       sinon.assert.calledOnceWithExactly(findstub, query)
       assert.equal(result.status, 200);
@@ -27,7 +27,7 @@ describe('Weight Model', () => {
     it('should upon error trying to get return error message and 500 status', async () => {
       const findstub = sinon.stub(Weight, 'find').throws(new Error("Example DB error"));
       let query = {userId : "user3"}
-      result = await getWeightItems(query);
+      const result = await getWeightItems(query);
 
       sinon.assert.calledOnceWithExactly(findstub, query)
       assert.equal(result.status, 500);
@@ -43,7 +43,7 @@ describe('Weight Model', () => {
     it('should return 201 status and the item when succesfully saving', async () => {
       const mockData = { date: new Date("2024-03-19"), userId: "user3", value: 130 }
       const savestub = sinon.stub(Weight.prototype, 'save').resolves(mockData);
-      result = await createWeightItem(new Date("2024-03-19"), "user3", 130);
+      const result = await createWeightItem(new Date("2024-03-19"), "user3", 130);
       const ci = savestub.firstCall.thisValue
 
       sinon.assert.calledOnceWithExactly(savestub)
@@ -56,7 +56,7 @@ describe('Weight Model', () => {
 
     it('should upon error trying to save return error message and 400 status', async () => {
       const savestub = sinon.stub(Weight.prototype, 'save').throws(new Error("Example DB error saving"));
-      result = await createWeightItem(new Date("2024-03-19"), "user3", 130);
+      const result = await createWeightItem(new Date("2024-03-19"), "user3", 130);
 
       sinon.assert.calledOnceWithExactly(savestub)
       assert.equal(result.status, 400);
@@ -71,7 +71,7 @@ describe('Weight Model', () => {
 
     it('should delete weight item data returning a message and 204 status', async () => {
       const findstub = sinon.stub(Weight, 'findByIdAndDelete').resolves();
-      result = await deleteWeightItem(5);
+      const result = await deleteWeightItem(5);
 
       sinon.assert.calledOnceWithExactly(findstub, 5)
       assert.equal(result.status,204);
@@ -80,7 +80,7 @@ describe('Weight Model', () => {
 
     it('should upon error trying to get return error message and 500 status', async () => {
       const findstub = sinon.stub(Weight, 'findByIdAndDelete').throws(new Error("Example DB error delete"));
-      result = await deleteWeightItem(5);
+      const result = await deleteWeightItem(5);
 
       sinon.assert.calledOnceWithExactly(findstub, 5)
       assert.equal(result.status,500);

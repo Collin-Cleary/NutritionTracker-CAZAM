@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const foodEntryController = require('../controllers/foodEntryController');
 
 // Import the function to create food entry (assuming it's exported from another file)
-var FoodEntryModule = require('../models/foodEntryModel');
+const FoodEntryModule = require('../models/foodEntryModel');
 
 describe('foodEntryController', function() {
   afterEach(() => {

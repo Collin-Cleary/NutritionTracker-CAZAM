@@ -16,7 +16,7 @@ describe('Food Item Model', () => {
       ];
       const findstub = sinon.stub(FoodItem, 'find').resolves(mockData);
       let query = {userId : "user1"}
-      result = await getFoodItem(query);
+      const result = await getFoodItem(query);
 
       sinon.assert.calledOnceWithExactly(findstub, query)
       assert.equal(result.status, 200);
@@ -27,7 +27,7 @@ describe('Food Item Model', () => {
     it('should upon error trying to get return error message and 500 status', async () => {
       const findstub = sinon.stub(FoodItem, 'find').throws(new Error("Example DB error"));
       let query = {userId : "user1"}
-      result = await getFoodItem(query);
+      const result = await getFoodItem(query);
 
       sinon.assert.calledOnceWithExactly(findstub, query)
       assert.equal(result.status, 500);
@@ -43,7 +43,7 @@ describe('Food Item Model', () => {
     it('should return 201 status and the item when succesfully saving', async () => {
       const mockData = { nutrition: {"vitamin C" : 20, "iron" : 2}, name: "baked potatoes", ingredients: "potatoes cheese" ,userId : "user1"}
       const savestub = sinon.stub(FoodItem.prototype, 'save').resolves(mockData);
-      result = await createFoodItem({"vitamin C" : 20, "iron" : 2}, "baked potatoes", "potatoes cheese", "user1");
+      const result = await createFoodItem({"vitamin C" : 20, "iron" : 2}, "baked potatoes", "potatoes cheese", "user1");
       const fi = savestub.firstCall.thisValue
 
       sinon.assert.calledOnceWithExactly(savestub)
@@ -57,7 +57,7 @@ describe('Food Item Model', () => {
 
     it('should upon error trying to save return error message and 400 status', async () => {
       const savestub = sinon.stub(FoodItem.prototype, 'save').throws(new Error("Example DB error saving"));
-      result = await createFoodItem({"vitamin C" : 20, "iron" : 2}, "baked potatoes", "potatoes cheese", "user1");
+      const result = await createFoodItem({"vitamin C" : 20, "iron" : 2}, "baked potatoes", "potatoes cheese", "user1");
 
       sinon.assert.calledOnceWithExactly(savestub)
       assert.equal(result.status, 400);
@@ -72,7 +72,7 @@ describe('Food Item Model', () => {
 
     it('should delete food item data returning a message and 204 status', async () => {
       const findstub = sinon.stub(FoodItem, 'findByIdAndDelete').resolves();
-      result = await deleteFoodItem(5);
+      const result = await deleteFoodItem(5);
 
       sinon.assert.calledOnceWithExactly(findstub, 5)
       assert.equal(result.status,204);
@@ -81,7 +81,7 @@ describe('Food Item Model', () => {
 
     it('should upon error trying to get return error message and 500 status', async () => {
       const findstub = sinon.stub(FoodItem, 'findByIdAndDelete').throws(new Error("Example DB error delete"));
-      result = await deleteFoodItem(5);
+      const result = await deleteFoodItem(5);
 
       sinon.assert.calledOnceWithExactly(findstub, 5)
       assert.equal(result.status,500);

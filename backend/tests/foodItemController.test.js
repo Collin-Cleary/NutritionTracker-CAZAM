@@ -2,7 +2,7 @@ const sinon = require('sinon');
 
 const foodItemController = require('../controllers/foodItemController');
 
-var foodItemModule = require('../models/foodItemModel');
+const foodItemModule = require('../models/foodItemModel');
 
 describe('foodEntryController', function() {
   afterEach(() => {

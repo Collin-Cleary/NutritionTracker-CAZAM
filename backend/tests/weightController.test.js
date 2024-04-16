@@ -2,7 +2,7 @@ const sinon = require('sinon');
 
 const weightController = require('../controllers/weightController');
 
-var weightModule = require('../models/weightModel');
+const weightModule = require('../models/weightModel');
 
 describe('foodEntryController', function() {
   afterEach(() => {

@@ -2,7 +2,7 @@ const sinon = require('sinon');
 
 const waterController = require('../controllers/waterController');
 
-var waterModule = require('../models/waterModel');
+const waterModule = require('../models/waterModel');
 
 describe('foodEntryController', function() {
   afterEach(() => {
