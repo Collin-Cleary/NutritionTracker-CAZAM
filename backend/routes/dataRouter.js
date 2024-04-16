@@ -28,19 +28,20 @@ router.get('/fooditem', foodItemController.getFoodItemData);
 router.post('/fooditem', foodItemController.createFoodItemData);
 router.delete('/fooditem/:id', foodItemController.deleteFoodItemData);
 
+// Food Entry routes
 router.get('/foodentry', foodEntryController.getFoodEntryData);
 router.post('/foodentry', foodEntryController.createFoodEntryData);
 router.delete('/foodentry/:id', foodEntryController.deleteFoodEntryData);
 
 // Food Entry routes
-router.get('/foodentry', dataController.getFoodEntryData);
-router.post('/foodentry', dataController.createFoodEntryData);
-router.delete('/foodentry/:id', dataController.deleteFoodEntryData);
+// router.get('/foodentry', dataController.getFoodEntryData);
+// router.post('/foodentry', dataController.createFoodEntryData);
+// router.delete('/foodentry/:id', dataController.deleteFoodEntryData);
 
 // Food Item routes
-router.get('/fooditem', dataController.getFoodItemData);
-router.post('/fooditem', dataController.createFoodItemData);
-router.delete('/fooditem/:id', dataController.deleteFoodItemData);
+// router.get('/fooditem', dataController.getFoodItemData);
+// router.post('/fooditem', dataController.createFoodItemData);
+// router.delete('/fooditem/:id', dataController.deleteFoodItemData);
 
 
 module.exports = router;
