@@ -125,9 +125,7 @@ button.link-button {
   cursor: pointer;
 }
 
-.Planner {
-  padding: 20px;
-}
+
 
 .food-item {
   padding: 10px;
@@ -200,11 +198,11 @@ button.link-button {
 /* Define the active class */
 .Home-nav button:active {
   background-color: lightgray;
-  border-bottom: 3px solid rgb(0, 102, 238);;
+  border-bottom: 3px solid rgb(0, 102, 238);
 }
 .Home-nav button.active {
   background-color: lightgray;
-  border-bottom: 3px solid rgb(0, 102, 238);;
+  border-bottom: 3px solid rgb(0, 102, 238);
 }
 
 /* Diet Planner */
@@ -212,39 +210,6 @@ button.link-button {
   padding: 20px;
 }
 
-.food-item {
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.food-item:hover {
-  background-color: rgba(14, 181, 218, 0.806);
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.modal button {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
-}
 
 /* User Goals */
 

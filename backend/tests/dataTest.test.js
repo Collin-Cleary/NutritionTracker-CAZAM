@@ -17,7 +17,7 @@ describe('Unit Tests', () => {
 
     it('should login with correct credentials and return JWT token', () => {
       try{
-          const validCredentials = { userName: 'john_doe', password: 'password123' };
+          const validCredentials = { userName: 'john_doe', password: 'password123' }; // NOSONAR
           const req = { body: validCredentials }; // Mock request object
           const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
           const user = { userName: validCredentials.userName };
@@ -35,7 +35,7 @@ describe('Unit Tests', () => {
     });
 
     it('should return 401 for invalid credentials', () => {
-      const invalidCredentials = { userName: 'invalid_user', password: 'invalid_password' };
+      const invalidCredentials = { userName: 'invalid_user', password: 'invalid_password' }; // NOSONAR
       const req = { body: invalidCredentials }; // Mock request object
       const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
       sinon.stub(User, 'findOne').resolves(null);
@@ -75,7 +75,7 @@ describe('Unit Tests', () => {
           userName: 'john_doe',
           name: 'John Doe',
           email: 'johndoe@example.com',
-          password: 'password123',
+          password: 'password123', // NOSONAR
           confirmPassword: 'password123',
           height: 180,
           weight: 75
@@ -96,7 +96,7 @@ describe('Unit Tests', () => {
         const invalidProfileData = {
           name: 'Test User',
           email: 'test@example.com',
-          password: 'password123',
+          password: 'password123', // NOSONAR
           confirmPassword: 'password456', // Different password
           height: 180,
           weight: 75
@@ -115,7 +115,7 @@ describe('Unit Tests', () => {
           userName: 'existing_user',
           name: 'Existing User',
           email: 'test@example.com',
-          password: 'password123',
+          password: 'password123', // NOSONAR
           confirmPassword: 'password123',
           height: 170,
           weight: 70

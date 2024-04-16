@@ -63,10 +63,10 @@ function App() {
     <div className="App">
 
       <header>
-        <div class="header-left">
+        <div className="header-left">
           <h1>NutriKit</h1>
         </div>
-        <div class="header-right">
+        <div className="header-right">
           <nav>
             <ul>
               { isLoggedIn && (

@@ -45,7 +45,7 @@ const FoodItems = (props) => {
   return (
       <div className="Items">
         {foodData.map((food, index) => (
-            <div className="food-item">
+            <div className="food-item" key={index} onClick={() => handleClick(food)}>
               {food.item_name}
             </div>
         ))}
