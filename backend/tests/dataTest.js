@@ -10,13 +10,13 @@ const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+
 describe('Unit Tests', () => {
-  // Progress report
+  //progress-report
   describe('Progress report', () => {
     afterEach(() => {
       sinon.restore();
     });
-
     it('should get water data for a specific user sorted by date', async () => {
       try {
         const userId = '123';
@@ -25,17 +25,24 @@ describe('Unit Tests', () => {
           status: sinon.stub().returnsThis(),
           json: sinon.stub()
         }; // Mock response object
-
+  
         const testData = [
           { userId: userId, date: new Date('2023-01-01'), amount: 500 },
           { userId: userId, date: new Date('2023-01-02'), amount: 700 },
           { userId: userId, date: new Date('2023-01-03'), amount: 600 }
         ];
-        const expectedSortedData = testData.slice().sort((a, b) => a.date - b.date); // Sorting testData
+  
+        const expectedSortedData = [
+          { userId: userId, date: new Date('2023-01-01'), amount: 500 },
+          { userId: userId, date: new Date('2023-01-02'), amount: 700 },
+          { userId: userId, date: new Date('2023-01-03'), amount: 600 }
+        ];
+  
         const findStub = sinon.stub(Water, 'find').resolves(testData);
-
+  
         await dataController.getWaterDataByUser(req, res);
-
+        
+  
         assert(findStub.calledOnceWithExactly({ userId: userId }));
         assert(res.status.calledOnceWithExactly(200));
         assert(res.json.calledOnceWithExactly(expectedSortedData));
@@ -49,19 +56,33 @@ describe('Unit Tests', () => {
         const userId = 'testUser';
         const req = { params: { user: userId } };
         const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
-
+  
         const testData = [
           { userId: userId, date: new Date('2023-01-01'), calories: 500 },
           { userId: userId, date: new Date('2023-01-02'), calories: 700 },
           { userId: userId, date: new Date('2023-01-03'), calories: 600 }
         ];
-        const expectedSortedData = testData.slice().sort((a, b) => a.date - b.date); // Sorting testData
+
+        const expectedSortedData = [
+          { userId: userId, date: new Date('2023-01-01'), amount: 500 },
+          { userId: userId, date: new Date('2023-01-02'), amount: 700 },
+          { userId: userId, date: new Date('2023-01-03'), amount: 600 }
+        ];
+  
         const findStub = sinon.stub(Calorie, 'find').resolves(testData);
-
+  
         await dataController.getCalorieDataByUser(req, res);
-
+  
+        // Check if Calorie.find() is called with correct userId parameter
         assert(findStub.calledOnceWithExactly({ userId: userId }));
+  
+        // Check if response status is set to 200
         assert(res.status.calledOnceWithExactly(200));
+  
+        // Check if response JSON data is correct
+        assert(res.json.calledOnceWithExactly(testData));
+
+        // Check if response JSON data is sorted by date
         assert(res.json.calledOnceWithExactly(expectedSortedData));
       } catch (error) {
         console.error(error);
@@ -73,19 +94,33 @@ describe('Unit Tests', () => {
         const userId = 'testUser';
         const req = { params: { user: userId } };
         const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
-
+  
         const testData = [
           { userId: userId, date: new Date('2023-01-01'), value: 70 },
           { userId: userId, date: new Date('2023-01-02'), value: 65 },
           { userId: userId, date: new Date('2023-01-03'), value: 68 }
         ];
-        const expectedSortedData = testData.slice().sort((a, b) => a.date - b.date); // Sorting testData
+
+        const expectedSortedData = [
+          { userId: userId, date: new Date('2023-01-01'), amount: 70 },
+          { userId: userId, date: new Date('2023-01-02'), amount: 65 },
+          { userId: userId, date: new Date('2023-01-03'), amount: 68 }
+        ];
+  
         const findStub = sinon.stub(Weight, 'find').resolves(testData);
-
+  
         await dataController.getWeightDataByUser(req, res);
-
+  
+        // Check if Weight.find() is called with correct userId parameter
         assert(findStub.calledOnceWithExactly({ userId: userId }));
+  
+        // Check if response status is set to 200
         assert(res.status.calledOnceWithExactly(200));
+  
+        // Check if response JSON data is correct
+        assert(res.json.calledOnceWithExactly(testData));
+
+        // Check if response JSON data is sorted by date
         assert(res.json.calledOnceWithExactly(expectedSortedData));
       } catch (error) {
         console.error(error);
@@ -93,12 +128,11 @@ describe('Unit Tests', () => {
     });
   });
 
-  // Water Controller
+  // Water
   describe('Water Controller', () => {
     afterEach(() => {
       sinon.restore();
     });
-
     it('should get water data', async () => {
       try {
         const mockData = [
@@ -108,21 +142,20 @@ describe('Unit Tests', () => {
         const req = {}; // Mock request object
         const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
         const findStub = sinon.stub(Water, 'find').resolves(mockData);
-
         await dataController.getWaterData(req, res);
-
         assert(res.status.calledOnceWithExactly(200));
         assert(res.json.calledOnceWithExactly(mockData));
       } catch (error) {
         console.error(error);
       }
-    });
+    });    
 
     it('should add water data', async () => {
-      try {
+      try{
         const newData = { date: new Date(), userId: '123', amount: 500 };
         const req = { body: newData }; // Mock request object
         const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+
         const saveStub = sinon.stub(Water.prototype, 'save').resolves(newData);
 
         await dataController.createWaterData(req, res);
@@ -132,17 +165,19 @@ describe('Unit Tests', () => {
         assert(res.json.calledOnceWithExactly(newData));
       } catch (error) {
         console.error(error);
-      }
+      }      
     });
 
     it('should delete water data successfully', async () => {
       try {
         const req = { params: { id: 'someId' } };
         const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        // Mocking Water.findByIdAndDelete to resolve
         const findByIdAndDeleteStub = sinon.stub(Water, 'findByIdAndDelete').resolves();
-
+  
         await dataController.deleteWaterData(req, res);
-
+  
         assert(findByIdAndDeleteStub.calledOnceWith(req.params.id));
         assert(res.status.calledOnceWith(204));
         assert(res.json.calledOnceWith({ message: 'Water data deleted successfully' }));
@@ -150,25 +185,29 @@ describe('Unit Tests', () => {
         console.error(error);
       }
     });
-
+  
     it('should handle errors', async () => {
       try {
-        const error = new Error('Test error');
         const req = { params: { id: 'someId' } };
         const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
+  
+        const error = new Error('Test error');
+  
+        // Mocking Water.findByIdAndDelete to reject with error
         const findByIdAndDeleteStub = sinon.stub(Water, 'findByIdAndDelete').rejects(error);
-
+  
         await dataController.deleteWaterData(req, res);
-
+  
+        assert(findByIdAndDeleteStub.calledOnceWith(req.params.id));
         assert(res.status.calledOnceWith(500));
         assert(res.json.calledOnceWith({ message: error.message }));
       } catch (error) {
         console.error(error);
       }
     });
+
   });
 
-  // Calorie Controller
   // Calorie
   describe('Calorie Controller', () => {
     afterEach(() => {
@@ -440,4 +479,5 @@ describe('Unit Tests', () => {
       });
 
   });
+
 });
