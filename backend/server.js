@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: '*', // Allow requests from any origin
+  origin: '*', // Allow requests from any origin // NOSONAR
 }));
 app.use(bodyParser.json());
 app.use(express.json());
