@@ -69,9 +69,6 @@ function App() {
         <div class="header-right">
           <nav>
             <ul>
-              {/*<li>Home</li>*/}
-              {/*<li>About</li>*/}
-              {/*<li>Contact</li>*/}
               { isLoggedIn && (
                 <li>
                   <button className="nav-link" onClick={handleLogout}>Logout</button>

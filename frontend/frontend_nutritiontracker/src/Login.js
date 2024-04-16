@@ -10,6 +10,16 @@ function Login(props) {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const[name, setName] = useState('');
+  const[age, setAge] = useState('');
+  const[height, setHeight] = useState('');
+  const[weight, setWeight] = useState('');
+  const[email, setEmail] = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
+  const [error, setError] = useState('');
+
+
+
   const toggleForm = () => {
     setCreatingAccount(!isCreatingAccount);
   };
@@ -24,7 +34,7 @@ function Login(props) {
     localStorage.setItem('userName', id);
     localStorage.setItem('access_token', token); // Store token in localStorage
     setIsLoggedIn(true);
-    window.location.reload();
+    window.location.reload(); 
     } catch (error){
         console.error('Error logging in:', error);
     }      
@@ -32,6 +42,33 @@ function Login(props) {
   const handleLogin= (e) => {
     login(id, password);
     e.preventDefault();
+  }
+
+  const createProfile = async (_username, _name, _age, _height, _weight, _email , _pw, _confirmPw) =>{
+    try{
+      const response = await axios.post('http://localhost:5000/auth/create-profile', {
+        userName: _username,
+        name: _name,
+        email: _email,
+        password: _pw,
+        confirmPassword: _confirmPw,
+        height: _height,
+        weight: _weight
+      })
+      console.log("Profile created successfully");
+      window.location.reload();
+    } catch(error){
+      console.log(`Error fetching data from the server: `, error);
+    }
+  }
+
+  const handleRegistration = (e) => {
+    e.preventDefault();
+    if (password !== confirmPw) {
+      setError('Passwords do not match');
+      return;
+    }
+    createProfile(id, name, age, height, weight, email, password, confirmPw);
   }
 
   return (
@@ -55,30 +92,34 @@ function Login(props) {
             {isCreatingAccount && (
               <div>
                 <div className="form-group">
-                  <input type="text" placeholder="Pick a username" />
+                  <input type="text" placeholder="Pick a username" value={id} onChange={(e) => setId(e.target.value)} required/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Enter your name" />
+                  <input type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} required/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Enter your age" />
+                  <input type="text" placeholder="Enter your age" value={age} onChange={(e) => setAge(e.target.value)} required/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Enter your height" />
+                  <input type="text" placeholder="Enter your height" value={height} onChange={(e) => setHeight(e.target.value)} required/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Enter your weight" />
+                  <input type="text" placeholder="Enter your weight" value={weight} onChange={(e) => setWeight(e.target.value)} required/>
                 </div>
                 <div className="form-group">
-                  <input type="email" placeholder="Enter your email" />
+                  <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                 </div>
                 <div className="form-group">
-                  <input type="password" placeholder="Enter your password" />
+                  <input type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                 </div>
                 <div className="form-group">
-                  <input type="password" placeholder="Confirm password" />
+                  <input type="password" placeholder="Confirm password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} required/>
                 </div>
-                <button type="submit">Register</button>
+                {error == ' '? ' ' 
+                : <div className="error-message">
+                    {error}
+                  </div>}
+                <button type="submit" onClick={handleRegistration}>Register</button>
               </div>
             )}
           </form>
