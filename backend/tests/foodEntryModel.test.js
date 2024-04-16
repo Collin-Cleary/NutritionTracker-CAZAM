@@ -19,7 +19,7 @@ describe('Food Entry Model', () => {
       }
       let query = {userId : "user1"}
       const findstub = sinon.stub(FoodEntry, 'find')
-      mockfunc = {populate : function() {return populateddata}}
+      const mockfunc = {populate : function() {return populateddata}}
       const populatemock = sinon.mock(mockfunc)
       findstub.withArgs(query).returns(populatemock.object);
       const result = await getFoodEntry(query);
