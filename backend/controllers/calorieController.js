@@ -7,6 +7,12 @@ calorieController.getCalorieItemData = async (req, res) => {
   res.status(result.status).json(result.json)
 };
 
+calorieController.getHighestCalorieItemData = async (req, res) => {
+  const result = await calorieModule.getHighestCalorieItems(req.query)
+  res.status(result.status).json(result.json)
+};
+
+
 calorieController.createCalorieItemData = async (req, res) => {
   const result = await calorieModule.createCalorieItem(req.body.date, req.body.userId, req.body.intake)
   res.status(result.status).json(result.json)

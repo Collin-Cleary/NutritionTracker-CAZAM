@@ -35,6 +35,16 @@ async function createCalorieItem(date, userId, intake) {
 }
 
 async function getCalorieItems(query) {
+  Object.entries(query).map(([key, value]) => [String(key), String(value)])
+  try {
+    const data = await Calorie.find(query)
+    return {status : 200, json : data}
+  } catch (err) {
+    return {status : 500, json : {message : err.message}}
+  }
+}
+
+async function getHighestCalorieItem(query) {
   try {
     const data = await Calorie.aggregate([
       { $match: query }, 
@@ -53,4 +63,4 @@ async function getCalorieItems(query) {
 }
 
 
-module.exports = {Calorie, deleteCalorieItem, createCalorieItem, getCalorieItems};
+module.exports = {Calorie, deleteCalorieItem, createCalorieItem, getCalorieItems,getHighestCalorieItem};
