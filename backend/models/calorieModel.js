@@ -35,7 +35,7 @@ async function createCalorieItem(date, userId, intake) {
 }
 
 async function getCalorieItems(query) {
-  Object.entries(query).map(([key, value]) => [key, String(value)])
+  Object.entries(query).map(([key, value]) => [String(key), String(value)])
   try {
     const data = await Calorie.find(query)
     return {status : 200, json : data}
