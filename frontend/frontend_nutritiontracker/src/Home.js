@@ -1,7 +1,8 @@
 import React,{useState} from 'react';
 import './App.css';
 import FoodItems from './FoodItems';
-import DietTracker from './DietTracker'
+import DietTracker from './DietTracker';
+import DietPlanner from './DietPlanner'
 
 function Home(props) {
   const [username] = useState('Zaige Shi');
@@ -19,6 +20,8 @@ function Home(props) {
           return <FoodItems/>;
         case 'DietTracker':
           return <DietTracker/>;
+          case 'DietPlanner':
+            return <DietPlanner/>;
         default:
           return null;
       }
