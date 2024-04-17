@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import './App.css';
+import axios from 'axios';
 
 
 function DietTracker() {
@@ -21,8 +22,16 @@ function DietTracker() {
     const [quantity, setQuantity] = useState(1);
 
     const handleAddFoodItem  = () => {
+        const username = localStorage.getItem('userName');
+        const date = new Date().toISOString().slice(0, 10);
         if (selectedFood && quantity) {
             setConsumedCalories(consumedCalories + selectedFood.calories * quantity);
+            axios.post('http://localhost:5000/api/calorie', {date, userId: username, intake:consumedCalories}).then
+            (response => {
+                console.log(response);
+            }).catch(error => {
+                console.log(error);
+            });  
           }          
     };
 

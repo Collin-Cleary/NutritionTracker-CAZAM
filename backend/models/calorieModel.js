@@ -36,10 +36,19 @@ async function createCalorieItem(date, userId, intake) {
 
 async function getCalorieItems(query) {
   try {
-    const data = await Calorie.find(query)
-    return {status : 200, json : data}
+    const data = await Calorie.aggregate([
+      { $match: query }, 
+      { $sort: { intake: -1 } }, 
+      { $limit: 1 } 
+    ]);
+    
+    if (data.length === 0) {
+      return { status: 404, json: { message: 'No records found' } };
+    }
+
+    return { status: 200, json: data };
   } catch (err) {
-    return {status : 500, json : {message : err.message}}
+    return { status: 500, json: { message: err.message } };
   }
 }
 
