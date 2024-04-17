@@ -35,6 +35,7 @@ async function createWaterItem(date, userId, amount) {
 }
 
 async function getWaterItems(query) {
+  Object.entries(query).map(([key, value]) => [key, String(value)])
   try {
     const data = await Water.find(query)
     return {status : 200, json : data}

@@ -35,6 +35,7 @@ async function createWeightItem(date, userId, value) {
 }
 
 async function getWeightItems(query) {
+  Object.entries(query).map(([key, value]) => [key, String(value)])
   try {
     const data = await Weight.find(query)
     return {status : 200, json : data}

@@ -36,6 +36,7 @@ async function createFoodEntry(date, name, parts, userId) {
 }
 
 async function getFoodEntry(query) {
+  Object.entries(query).map(([key, value]) => [key, String(value)])
   try {
     let data = await FoodEntry.find(query).populate('parts')
     return {status : 200, json : data}
