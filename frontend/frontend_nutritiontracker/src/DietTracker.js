@@ -37,7 +37,7 @@ function DietTracker({ consumedCalories, setConsumedCalories }) {
     };
 
     fetchData();
-  }, [setConsumedCalories]);
+  }, []);
 
   const updateConsumedCalories = async (intake) => {
     const username = localStorage.getItem('userName');

@@ -12,6 +12,8 @@ const foodEntryController = require('../controllers/foodEntryController');
 router.get('/water', waterController.getWaterItemData);
 router.post('/water', waterController.createWaterItemData);
 router.delete('/water/:id', waterController.deleteWaterItemData);
+router.get('/water/:userId/:date', waterController.getWaterRecord);
+router.put('/water/:userId/:date', waterController.updateWaterRecord);
 
 // Calorie routes
 router.get('/calorie', calorieController.getCalorieItemData);

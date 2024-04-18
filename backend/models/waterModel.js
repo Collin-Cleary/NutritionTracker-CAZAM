@@ -43,6 +43,31 @@ async function getWaterItems(query) {
   }
 }
 
+async function getWaterRecord(userId, date) {
+  try {
+    const record = await Water.findOne({ userId, date });
+    return { status: 200, json: record };
+  } catch (err) {
+    return { status: 500, json: { message: err.message } };
+  }
+}
+
+async function updateWaterRecord(userId, date, amount) {
+  try {
+    const record = await Water.findOneAndUpdate({ userId, date }, { amount }, { new: true });
+    return { status: 200, json: record };
+  } catch (err) {
+    return { status: 500, json: { message: err.message } };
+  }
+}
+
+module.exports = { Water, getWaterItems, createWaterItem, deleteWaterItem, getWaterRecord, updateWaterRecord };
 
 
-module.exports = {Water, getWaterItems, createWaterItem, deleteWaterItem};
+
+
+
+
+
+
+
