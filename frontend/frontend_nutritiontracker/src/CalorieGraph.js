@@ -5,10 +5,10 @@ import axios from 'axios';
 
 import './App.css';
 
-var username;
+let username;
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const CalorieGraph = ({ apiUrl }) => {
+const CalorieGraph = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -80,7 +80,7 @@ const CalorieGraph = ({ apiUrl }) => {
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, []);
 
   // Options for the bar chart
   const options = {
