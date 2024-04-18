@@ -3,7 +3,7 @@
   import FoodItems from './FoodItems';
   import DietTracker from './DietTracker';
   import WaterTracker from './WaterTracker';
-  import WeightTracker from './WeightTracker';;
+  import WeightTracker from './WeightTracker';
   import DietPlanner from './DietPlanner'
   import WeightGraph from './WeightGraph';
   import CalorieGraph from './CalorieGraph';
