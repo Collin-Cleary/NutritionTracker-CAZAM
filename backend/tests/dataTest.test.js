@@ -35,7 +35,7 @@ describe('Unit Tests', () => {
       const invalidCredentials = { userName: 'john_doe', password: 'invalid_password' }; // NOSONAR
       const req = { body: invalidCredentials }; // Mock request object
       const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
-      const user = { userName: 'existing_user', password: 'hashed_password' }; // Existing user object // NOSONAR
+      const user = { userName: 'existing_user', password: 'hashed_password' }; // NOSONAR
       sinon.stub(User, 'findOne').resolves(user); 
       sinon.stub(bcrypt, 'compare').resolves(false);
     
