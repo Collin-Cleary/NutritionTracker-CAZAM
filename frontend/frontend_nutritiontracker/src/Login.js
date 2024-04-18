@@ -26,7 +26,7 @@ function Login(props) {
 
   const login = async (id , password) => {
     try{
-        const response = await axios.post('http://localhost:5000/auth/login', {
+        const response = await axios.post('http://localhost:3000/auth/login', {
         userName: id,
         password: password
     });
@@ -46,7 +46,7 @@ function Login(props) {
 
   const createProfile = async (_username, _name, _age, _height, _weight, _email , _pw, _confirmPw) =>{
     try{
-      const response = await axios.post('http://localhost:5000/auth/create-profile', {
+      const response = await axios.post('http://localhost:3000/auth/create-profile', {
         userName: _username,
         name: _name,
         email: _email,

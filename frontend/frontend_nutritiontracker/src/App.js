@@ -4,7 +4,7 @@ import Login from './Login';
 import Home from './Home';
 import axios from "axios";
 
-const baseUrl = "http://localhost:5000";
+const baseUrl = "http://localhost:3000";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
