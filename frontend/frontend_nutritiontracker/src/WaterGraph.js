@@ -8,7 +8,7 @@ import './App.css';
 var username;
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const WaterGraph = ({ apiUrl }) => {
+const WaterGraph = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -80,7 +80,7 @@ const WaterGraph = ({ apiUrl }) => {
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, []);
 
   // Options for the bar chart
   const options = {

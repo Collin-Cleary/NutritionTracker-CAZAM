@@ -8,7 +8,7 @@ import './App.css';
 var username;
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const WeightGraph = ({ apiUrl }) => {
+const WeightGraph = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -73,7 +73,7 @@ const WeightGraph = ({ apiUrl }) => {
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, []);
 
   // Options for the bar chart
   const options = {
