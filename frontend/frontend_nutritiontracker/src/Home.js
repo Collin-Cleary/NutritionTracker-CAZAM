@@ -3,6 +3,7 @@
   import FoodItems from './FoodItems';
   import DietTracker from './DietTracker';
   import DietPlanner from './DietPlanner'
+import WeightGraph from './WeightGraph';
 
   function Home(props) {
     const [name, setName] = useState('');
@@ -28,6 +29,8 @@
         switch (selectedTab) {
           case 'FoodItems':
             return <FoodItems/>;
+          case 'DietGoals':
+            return <WeightGraph/>;
           case 'DietTracker':
             return <DietTracker/>;
             case 'DietPlanner':
