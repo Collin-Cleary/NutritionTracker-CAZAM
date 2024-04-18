@@ -1,10 +1,66 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const {Calorie, deleteCalorieItem, createCalorieItem, getCalorieItems}= require("../models/calorieModel")
+const {Calorie, deleteCalorieItem, createCalorieItem, getCalorieItems,getHighestCalorieItem}= require("../models/calorieModel")
 
 
 describe('Calorie Model', () => {
+
   
+  
+  describe('getHighestCalorieItem', () => {
+    afterEach(() => {
+        sinon.restore();
+    });
+
+    it('should return 200 status and matching data when records are found', async () => {
+        const mockData = [
+            { date: "2024-03-19", userId: "user3", intake: 1800 }
+        ];
+        const aggregateStub = sinon.stub(Calorie, 'aggregate').resolves(mockData);
+        const query = { userId: "user3", date: "2024-03-19" };
+
+        const result = await getHighestCalorieItem(query);
+
+        sinon.assert.calledOnceWithExactly(aggregateStub, [
+            { $match: query },
+            { $sort: { intake: -1 } },
+            { $limit: 1 }
+        ]);
+        assert.equal(result.status, 200);
+        assert.deepEqual(result.json, mockData);
+    });
+
+    it('should return 404 status and message when no records are found', async () => {
+        const aggregateStub = sinon.stub(Calorie, 'aggregate').resolves([]);
+        const query = { userId: "user3", date: "2024-03-19" };
+
+        const result = await getHighestCalorieItem(query);
+
+        sinon.assert.calledOnceWithExactly(aggregateStub, [
+            { $match: query },
+            { $sort: { intake: -1 } },
+            { $limit: 1 }
+        ]);
+        assert.equal(result.status, 404);
+        assert.deepEqual(result.json, { message: 'No records found' });
+    });
+
+    it('should return 500 status and error message on database error', async () => {
+        const errorMessage = "Example DB error";
+        const aggregateStub = sinon.stub(Calorie, 'aggregate').throws(new Error(errorMessage));
+        const query = { userId: "user3", date: "2024-03-19" };
+
+        const result = await getHighestCalorieItem(query);
+
+        sinon.assert.calledOnceWithExactly(aggregateStub, [
+            { $match: query },
+            { $sort: { intake: -1 } },
+            { $limit: 1 }
+        ]);
+        assert.equal(result.status, 500);
+        assert.deepEqual(result.json, { message: errorMessage });
+    });
+  });
   describe('getCalorieItems', () => {
     afterEach(() => {
       sinon.restore();
@@ -34,7 +90,6 @@ describe('Calorie Model', () => {
       assert.deepEqual(result.json, {message : "Example DB error"});
     });
   });
-
   describe('createCalorieItem', () => {
     afterEach(() => {
       sinon.restore();
@@ -63,7 +118,6 @@ describe('Calorie Model', () => {
       assert.deepEqual(result.json,{message : "Example DB error saving"});
     });
   });
-
   describe('deleteCalorieItem', () => {
     afterEach(() => {
       sinon.restore();

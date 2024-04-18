@@ -44,5 +44,23 @@ async function getWeightItems(query) {
   }
 }
 
+async function getWeightRecord(userId, date) {
+  try {
+    const record = await Weight.findOne({ userId, date }); 
+    return { status: 200, json: record };
+  } catch (err) {
+    return { status: 500, json: { message: err.message } };
+  }
+}
 
-module.exports = {Weight, getWeightItems, createWeightItem, deleteWeightItem};
+async function updateWeightRecord(userId, date, value) {
+  try {
+    const record = await Weight.findOneAndUpdate({ userId, date }, { value }, { new: true });
+    return { status: 200, json: record };
+  } catch (err) {
+    return { status: 500, json: { message: err.message } };
+  }
+}
+
+
+module.exports = {Weight, getWeightItems, createWeightItem, deleteWeightItem, getWeightRecord, updateWeightRecord};

@@ -17,4 +17,14 @@ waterController.deleteWaterItemData = async (req, res) => {
   res.status(result.status).json(result.json)
 }; 
 
+waterController.getWaterRecord = async (req, res) => {
+  const result = await waterModule.getWaterRecord(req.params.userId, req.params.date)
+  res.status(result.status).json(result.json)
+};
+
+waterController.updateWaterRecord = async (req, res) => {
+  const result = await waterModule.updateWaterRecord(req.params.userId, req.params.date, req.body.amount)
+  res.status(result.status).json(result.json)
+};
+
 module.exports = waterController

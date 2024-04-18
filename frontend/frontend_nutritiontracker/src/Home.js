@@ -1,17 +1,20 @@
-  import React,{useState, useEffect} from 'react';
+  import React, { useState, useEffect } from 'react';
   import './App.css';
   import FoodItems from './FoodItems';
   import DietTracker from './DietTracker';
+  import WaterTracker from './WaterTracker';
+  import WeightTracker from './WeightTracker';
   import DietPlanner from './DietPlanner'
   import WeightGraph from './WeightGraph';
   import CalorieGraph from './CalorieGraph';
-import WaterGraph from './WaterGraph';
+  import WaterGraph from './WaterGraph';
 
   function Home(props) {
     const [name, setName] = useState('');
     const [selectedTab, setSelectedTab] = useState('FoodItems');
-
-    let id = null;
+    const [consumedCalories, setConsumedCalories] = useState(0);
+    const [waterIntake, setWaterIntake] = useState(0);
+    const [weight, setWeight] = useState(0);
 
     useEffect(() => {
       const fetchUserName = () => {
@@ -27,24 +30,28 @@ import WaterGraph from './WaterGraph';
         setSelectedTab(tab);
       };
 
-      const renderTabContent = () => {
-        switch (selectedTab) {
-          case 'FoodItems':
-            return <FoodItems/>;
-          case 'DietGoals':
+    const renderTabContent = () => {
+      switch (selectedTab) {
+        case 'FoodItems':
+          return <FoodItems />;
+        case 'WaterTracker':
+          return <WaterTracker waterIntake={waterIntake} setWaterIntake={setWaterIntake} />;
+        case 'WeightTracker':
+          return <WeightTracker weight={weight} setWeight={setWeight} />;
+        case 'DietGoals':
             return <div style={{display:'flex', flexDirection:'row'}}>
             <WeightGraph/>
             <CalorieGraph/>
             <WaterGraph/>
             </div>;
-          case 'DietTracker':
-            return <DietTracker/>;
-            case 'DietPlanner':
-              return <DietPlanner/>;
-          default:
-            return null;
-        }
-      };
+        case 'DietTracker':
+          return <DietTracker consumedCalories={consumedCalories} setConsumedCalories={setConsumedCalories} />;
+        case 'DietPlanner':
+          return <DietPlanner/>;
+        default:
+          return null;
+      }
+    };
 
     const buttons = document.querySelectorAll("Home-nav button");
     buttons.forEach((button) => {
@@ -68,6 +75,12 @@ import WaterGraph from './WaterGraph';
           <button type="button" onClick={() => handleTabChange('FoodItems')}>
             Food/Meal Items
           </button>
+          <button type="button" onClick={() => handleTabChange('WaterTracker')}>
+          Water Tracker
+        </button>
+        <button type="button" onClick={() => handleTabChange('WeightTracker')}>
+          Weight Tracker
+        </button>
           <button type="button" onClick={() => handleTabChange('DietTracker')}>
             Diet Tracker
           </button>
