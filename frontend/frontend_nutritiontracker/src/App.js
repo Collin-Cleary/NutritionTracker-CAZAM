@@ -3,6 +3,7 @@ import './App.css';
 import Login from './Login';
 import Home from './Home';
 import axios from "axios";
+import WeightGraph from './WeightGraph';
 
 const baseUrl = "http://localhost:5000";
 
@@ -79,7 +80,7 @@ function App() {
         </div>
       </header>
 
-      {isLoggedIn ? <Home /> : <Login handleLogin={handleLogin} />}
+      {isLoggedIn ? <WeightGraph /> : <Login handleLogin={handleLogin} />}
 
       <footer>
         <p>Group-3</p>
