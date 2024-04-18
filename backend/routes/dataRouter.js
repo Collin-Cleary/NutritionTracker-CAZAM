@@ -27,6 +27,8 @@ router.delete('/calorie/:id', calorieController.deleteCalorieItemData);
 router.get('/weight', weightController.getWeightItemData);
 router.post('/weight', weightController.createWeightItemData);
 router.delete('/weight/:id', weightController.deleteWeightItemData);
+router.get('/weight/:userId/:date', weightController.getWeightRecord);
+router.put('/weight/:userId/:date', weightController.updateWeightRecord);
 
 // Food Item Routes
 router.get('/fooditem', foodItemController.getFoodItemData);

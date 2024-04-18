@@ -3,12 +3,14 @@ import './App.css';
 import FoodItems from './FoodItems';
 import DietTracker from './DietTracker';
 import WaterTracker from './WaterTracker';
+import WeightTracker from './WeightTracker';
 
 function Home(props) {
   const [username] = useState('Zaige Shi');
   const [selectedTab, setSelectedTab] = useState('FoodItems');
   const [consumedCalories, setConsumedCalories] = useState(0);
   const [waterIntake, setWaterIntake] = useState(0);
+  const [weight, setWeight] = useState(0);
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -20,6 +22,8 @@ function Home(props) {
         return <FoodItems />;
       case 'WaterTracker':
         return <WaterTracker waterIntake={waterIntake} setWaterIntake={setWaterIntake} />;
+      case 'WeightTracker':
+        return <WeightTracker weight={weight} setWeight={setWeight} />;
       case 'DietTracker':
         return <DietTracker consumedCalories={consumedCalories} setConsumedCalories={setConsumedCalories} />;
       default:
@@ -41,6 +45,9 @@ function Home(props) {
         </button>
         <button type="button" onClick={() => handleTabChange('WaterTracker')}>
           Water Tracker
+        </button>
+        <button type="button" onClick={() => handleTabChange('WeightTracker')}>
+          Weight Tracker
         </button>
         <button type="button" onClick={() => handleTabChange('DietGoals')}>
           Diet Goals
