@@ -8,7 +8,7 @@ import './App.css';
 var username;
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const WeightGraph = ({ apiUrl }) => {
+const CalorieGraph = ({ apiUrl }) => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ const WeightGraph = ({ apiUrl }) => {
       username = localStorage.getItem('userName');
       try {
         // Fetch data from the API
-        const response = await axios.get('http://localhost:5000/api/weight', {
+        const response = await axios.get('http://localhost:5000/api/calorie', {
             params: {
               userId: username
             }
@@ -27,7 +27,7 @@ const WeightGraph = ({ apiUrl }) => {
 
         // Transform the data into a format suitable for the bar chart
         let labels = data.map(item => new Date(item.date.split("T")[0].replace(/-/g, '\/')));
-        let values = data.map(item => item.value);
+        let values = data.map(item => item.intake);
 
         const combined = labels.map((date, index) => ({
             date: date,
@@ -47,7 +47,7 @@ const WeightGraph = ({ apiUrl }) => {
         }
 
         labels = uniqueArray.map(item => item.date.toDateString())
-        values = uniqueArray.map(item => item.value)
+        values = uniqueArray.map(item => item.values)
 
         
 
@@ -90,7 +90,7 @@ const WeightGraph = ({ apiUrl }) => {
     plugins: {
       title: {
         display: true,
-        text: 'Weight Chart from ' + username,
+        text: 'Calorie Chart from ' + username,
       },
     },
   };
@@ -112,4 +112,4 @@ const WeightGraph = ({ apiUrl }) => {
   );
 };
 
-export default WeightGraph;
+export default CalorieGraph;
