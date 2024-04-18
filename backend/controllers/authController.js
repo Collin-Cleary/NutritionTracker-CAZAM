@@ -38,24 +38,40 @@ authController.createProfile = async (req, res) => {
     }
 };
 
-authController.login = (req, res) => {
+authController.login = async (req, res) => {
     const { userName, password } = req.body;
+    try{
+    // Find user
+    const user = await User.findOne({ userName });
 
-    // Find user in the users array
-    const user = users.find(u => u.userName === userName && u.password === password);
-
-    if (user) {
-        // Generate JWT token
-        const token = jwt.sign({ userName: user.userName }, '3d6818d12074be9c939de6c49c62f0bc', { expiresIn: '1h' });
-        res.status(200).json({ token });
-    } else {
-        res.status(401).json({ message: 'Invalid username or password' });
+    if (!user) {
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+          };    
     }
+
+    // Validate password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ userName: user.userName }, '3d6818d12074be9c939de6c49c62f0bc', { expiresIn: '1h' });
+    res.status(200).json({ token });
+    }catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 authController.logout = (req, res) => {
-    
     res.status(200).json({ message: 'Logout successful' });
 };
+
+authController.findAll = async (req, res) => {
+    const user = await User.findAll();
+    console.log(user);
+}
 
 module.exports = authController;
