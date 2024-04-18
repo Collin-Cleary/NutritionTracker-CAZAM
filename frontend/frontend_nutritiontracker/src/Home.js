@@ -5,6 +5,7 @@
   import DietPlanner from './DietPlanner'
   import WeightGraph from './WeightGraph';
   import CalorieGraph from './CalorieGraph';
+import WaterGraph from './WaterGraph';
 
   function Home(props) {
     const [name, setName] = useState('');
@@ -34,6 +35,7 @@
             return <div style={{display:'flex', flexDirection:'row'}}>
             <WeightGraph/>
             <CalorieGraph/>
+            <WaterGraph/>
             </div>;
           case 'DietTracker':
             return <DietTracker/>;
