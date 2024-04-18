@@ -43,19 +43,16 @@ authController.login = async (req, res) => {
     try{
     // Find user
     const user = await User.findOne({ userName });
-
     if (!user) {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
           };    
     }
-
     // Validate password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid password' });
     }
-
     // Generate JWT token
     const token = jwt.sign({ userName: user.userName }, '3d6818d12074be9c939de6c49c62f0bc', { expiresIn: '1h' });
     res.status(200).json({ token, name: user.name});
