@@ -22,6 +22,9 @@ function Login(props) {
 
   const toggleForm = () => {
     setCreatingAccount(!isCreatingAccount);
+    setId('')
+    setPassword('')
+    setError('')
   };
 
   const login = async (id , password) => {
@@ -39,8 +42,15 @@ function Login(props) {
     window.location.reload(); 
     } catch (error){
         console.error('Error logging in:', error);
+        if (error.response.status === 404){
+          setError('User not found')
+        }
+        else if(error.response.status === 401){
+          setError('Invalid password')
+        }
     }      
   }
+
   const handleLogin= (e) => {
     login(id, password);
     e.preventDefault();
@@ -87,6 +97,10 @@ function Login(props) {
                 <div className="form-group">
                   <input type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                 </div>
+                {error === ' '? ' ' 
+                : <div className="error-message">
+                    {error}
+                  </div>}
                 <button type="submit" onClick={handleLogin}>Login</button>
               </div>
             )}
@@ -117,7 +131,7 @@ function Login(props) {
                 <div className="form-group">
                   <input type="password" placeholder="Confirm password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} required/>
                 </div>
-                {error == ' '? ' ' 
+                {error === ' '? ' ' 
                 : <div className="error-message">
                     {error}
                   </div>}
