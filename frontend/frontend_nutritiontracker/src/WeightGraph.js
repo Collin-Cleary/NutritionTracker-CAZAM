@@ -57,8 +57,8 @@ const WeightGraph = ({ apiUrl }) => {
             {
               label: 'My Data',
               data: values,
-              backgroundColor: 'rgba(75, 192, 192, 0.6)',
-              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(128, 128, 128, 0.6)',
+              borderColor: 'rgba(128, 128, 128, 1)',
               borderWidth: 1,
             },
           ],
@@ -90,7 +90,7 @@ const WeightGraph = ({ apiUrl }) => {
     plugins: {
       title: {
         display: true,
-        text: 'Weight Chart from ' + username,
+        text: 'Weight Chart From ' + username,
       },
     },
   };

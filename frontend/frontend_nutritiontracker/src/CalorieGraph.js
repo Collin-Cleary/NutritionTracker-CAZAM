@@ -97,7 +97,7 @@ const CalorieGraph = ({ apiUrl }) => {
     plugins: {
       title: {
         display: true,
-        text: 'Calorie Chart from ' + username,
+        text: 'Calorie Chart From ' + username,
       },
     },
   };

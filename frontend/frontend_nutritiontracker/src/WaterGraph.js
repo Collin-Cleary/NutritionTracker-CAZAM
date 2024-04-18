@@ -64,8 +64,8 @@ const WaterGraph = ({ apiUrl }) => {
             {
               label: 'My Data',
               data: values,
-              backgroundColor: 'rgba(144, 238, 144, 0.6)',
-              borderColor: 'rgba(144, 238, 144, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
               borderWidth: 1,
             },
           ],
@@ -97,7 +97,7 @@ const WaterGraph = ({ apiUrl }) => {
     plugins: {
       title: {
         display: true,
-        text: 'water intake Chart from ' + username,
+        text: 'Water Intake Chart From ' + username,
       },
     },
   };
