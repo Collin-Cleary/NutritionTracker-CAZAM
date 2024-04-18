@@ -30,8 +30,10 @@ function Login(props) {
         userName: id,
         password: password
     });
-    const token = response.data.token;
+    const {token, name} = response.data;
+    
     localStorage.setItem('userName', id);
+    localStorage.setItem('name', name);
     localStorage.setItem('access_token', token); // Store token in localStorage
     setIsLoggedIn(true);
     window.location.reload(); 
