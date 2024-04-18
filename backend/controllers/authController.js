@@ -58,7 +58,7 @@ authController.login = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign({ userName: user.userName }, '3d6818d12074be9c939de6c49c62f0bc', { expiresIn: '1h' });
-    res.status(200).json({ token });
+    res.status(200).json({ token, name: user.name});
     }catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -67,11 +67,6 @@ authController.login = async (req, res) => {
 
 authController.logout = (req, res) => {
     res.status(200).json({ message: 'Logout successful' });
-};
-
-authController.findAll = async (req, res) => {
-    const user = await User.findAll();
-    console.log(user);
-}
+};  
 
 module.exports = authController;
