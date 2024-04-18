@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import './App.css';
 import axios from 'axios';
 
@@ -21,19 +21,69 @@ function DietTracker() {
     const [selectedFood, setSelectedFood] = useState(null);
     const [quantity, setQuantity] = useState(1);
 
-    const handleAddFoodItem  = () => {
-        const username = localStorage.getItem('userName');
-        const date = new Date().toISOString().slice(0, 10);
-        if (selectedFood && quantity) {
-            setConsumedCalories(consumedCalories + selectedFood.calories * quantity);
-            axios.post('http://localhost:5000/api/calorie', {date, userId: username, intake:consumedCalories}).then
-            (response => {
+    useEffect(() => {
+        const fetchData = async () => {
+            const username = localStorage.getItem('userName');
+            const date = new Date().toISOString().slice(0, 10);
+            const url = `http://localhost:5000/api/calorie/${username}/${date}`;
+            
+            try {
+                const response = await axios.get(url);
                 console.log(response);
-            }).catch(error => {
+                if (response.data) {
+                    setConsumedCalories(response.data['intake']);
+                    console.log(response.data[0]['intake']);
+                    
+                }
+            } catch (error) {
+                console.log('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleAddFoodItem = () => {
+    const username = localStorage.getItem('userName');
+    const date = new Date().toISOString().slice(0, 10);
+    if (selectedFood && quantity) {
+        const intake = selectedFood.calories * quantity;
+        setConsumedCalories(consumedCalories + intake);
+        const url = `http://localhost:5000/api/calorie/${username}/${date}`;
+        console.log(url);
+
+        // 发送 GET 请求以检查数据是否存在
+        axios.get(url)
+            .then(response => {
+                // 如果数据存在，使用 PUT 方法更新数据
+                if (response.data!==null && response.data.length > 0) {
+                    console.log(response.data);
+                    console.log(intake);
+                    setConsumedCalories(response.data[0].intake + intake);
+                    axios.put(url, { intake: response.data[0].intake + intake})
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                } else {
+                    // 如果数据不存在，使用 POST 方法创建新数据
+                    axios.post('http://localhost:5000/api/calorie', { date, userId: username, intake })
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            })
+            .catch(error => {
                 console.log(error);
-            });  
-          }          
-    };
+            });
+    }
+};
+
 
     const progress = Math.round((consumedCalories / calorieGoal) * 100);
         return (

@@ -15,8 +15,10 @@ router.delete('/water/:id', waterController.deleteWaterItemData);
 
 // Calorie routes
 router.get('/calorie', calorieController.getCalorieItemData);
+router.get('/calorie/:id/:date', calorieController.getCalorieItemDataByIdAndDate);
 router.get('/highestcalorie', calorieController.getHighestCalorieItemData);
 router.post('/calorie', calorieController.createCalorieItemData);
+router.put('/calorie/:id/:date', calorieController.updateCalorieItemData);
 router.delete('/calorie/:id', calorieController.deleteCalorieItemData);
 
 // Weight routes
