@@ -8,7 +8,7 @@ import './App.css';
 var username;
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const CalorieGraph = ({ apiUrl }) => {
+const WaterGraph = ({ apiUrl }) => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ const CalorieGraph = ({ apiUrl }) => {
       username = localStorage.getItem('userName');
       try {
         // Fetch data from the API
-        const response = await axios.get('http://localhost:5000/api/calorie', {
+        const response = await axios.get('http://localhost:5000/api/water', {
             params: {
               userId: username
             }
@@ -27,7 +27,7 @@ const CalorieGraph = ({ apiUrl }) => {
 
         // Transform the data into a format suitable for the bar chart
         let labels = data.map(item => new Date(item.date.split("T")[0].replace(/-/g, '\/')));
-        let values = data.map(item => item.intake);
+        let values = data.map(item => item.amount);
 
         const combined = labels.map((date, index) => ({
             date: date,
@@ -64,8 +64,8 @@ const CalorieGraph = ({ apiUrl }) => {
             {
               label: 'My Data',
               data: values,
-              backgroundColor: 'rgba(144, 238, 144, 0.6)',
-              borderColor: 'rgba(144, 238, 144, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
               borderWidth: 1,
             },
           ],
@@ -97,7 +97,7 @@ const CalorieGraph = ({ apiUrl }) => {
     plugins: {
       title: {
         display: true,
-        text: 'Calorie Chart From ' + username,
+        text: 'Water Intake Chart From ' + username,
       },
     },
   };
@@ -119,4 +119,4 @@ const CalorieGraph = ({ apiUrl }) => {
   );
 };
 
-export default CalorieGraph;
+export default WaterGraph;
