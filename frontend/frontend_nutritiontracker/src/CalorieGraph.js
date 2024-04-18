@@ -36,18 +36,25 @@ const CalorieGraph = ({ apiUrl }) => {
 
         combined.sort((a,b) => a.date - b.date);
 
-        const uniqueArray = []
-        const seenDates = new Set();
+        const dateValueMap = new Map();
 
         for (const item of combined) {
-          if(!seenDates.has(item.date.toDateString())){
-            seenDates.add(item.date.toDateString())
-            uniqueArray.push(item)
+          const date = item.date.getTime();
+          const value = item.value;
+          if (dateValueMap.has(date)) {
+            dateValueMap.set(date, dateValueMap.get(date) + value);
+          } else {
+            dateValueMap.set(date, value);
           }
         }
 
+        const uniqueArray = Array.from(dateValueMap).map(([date, value]) => ({
+          date: new Date(date),
+          value: value,
+        }));
+
         labels = uniqueArray.map(item => item.date.toDateString())
-        values = uniqueArray.map(item => item.values)
+        values = uniqueArray.map(item => item.value)
 
         
 
@@ -57,8 +64,8 @@ const CalorieGraph = ({ apiUrl }) => {
             {
               label: 'My Data',
               data: values,
-              backgroundColor: 'rgba(75, 192, 192, 0.6)',
-              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(144, 238, 144, 0.6)',
+              borderColor: 'rgba(144, 238, 144, 1)',
               borderWidth: 1,
             },
           ],

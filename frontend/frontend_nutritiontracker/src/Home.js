@@ -3,7 +3,8 @@
   import FoodItems from './FoodItems';
   import DietTracker from './DietTracker';
   import DietPlanner from './DietPlanner'
-import WeightGraph from './WeightGraph';
+  import WeightGraph from './WeightGraph';
+  import CalorieGraph from './CalorieGraph';
 
   function Home(props) {
     const [name, setName] = useState('');
@@ -30,7 +31,10 @@ import WeightGraph from './WeightGraph';
           case 'FoodItems':
             return <FoodItems/>;
           case 'DietGoals':
-            return <WeightGraph/>;
+            return <div style={{display:'flex', flexDirection:'row'}}>
+            <WeightGraph/>
+            <CalorieGraph/>
+            </div>;
           case 'DietTracker':
             return <DietTracker/>;
             case 'DietPlanner':
