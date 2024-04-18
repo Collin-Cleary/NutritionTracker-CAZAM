@@ -36,6 +36,7 @@ async function createFoodItem(nutrition, name, ingredients, userId) {
 }
 
 async function getFoodItem(query) {
+  Object.entries(query).map(([key, value]) => [String(key), String(value)])
   try {
     const data = await FoodItem.find(query)
     return {status : 200, json : data}

@@ -3,6 +3,8 @@ import './App.css';
 import Login from './Login';
 import Home from './Home';
 import axios from "axios";
+import WeightGraph from './WeightGraph';
+import CalorieGraph from './CalorieGraph';
 
 const baseUrl = "http://localhost:5000";
 axios.defaults.baseURL = 'http://localhost:5000';
