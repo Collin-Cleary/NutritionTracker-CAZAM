@@ -1,41 +1,27 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import FoodItems from './FoodItems';
-import DietTracker from './DietTracker'
+import DietTracker from './DietTracker';
 
 function Home(props) {
   const [username] = useState('Zaige Shi');
   const [selectedTab, setSelectedTab] = useState('FoodItems');
-
-  let id = null;
+  const [consumedCalories, setConsumedCalories] = useState(0);
 
   const handleTabChange = (tab) => {
-      setSelectedTab(tab);
-    };
+    setSelectedTab(tab);
+  };
 
-    const renderTabContent = () => {
-      switch (selectedTab) {
-        case 'FoodItems':
-          return <FoodItems/>;
-        case 'DietTracker':
-          return <DietTracker/>;
-        default:
-          return null;
-      }
-    };
-
-  const buttons = document.querySelectorAll("Home-nav button");
-  buttons.forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const clickedButton = event.target;
-      buttons.forEach((button) => {
-        if (button !== clickedButton) {
-          button.classList.remove("active");
-        }
-      });
-      clickedButton.classList.add("active");
-    });
-  });
+  const renderTabContent = () => {
+    switch (selectedTab) {
+      case 'FoodItems':
+        return <FoodItems />;
+      case 'DietTracker':
+        return <DietTracker consumedCalories={consumedCalories} setConsumedCalories={setConsumedCalories} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="App">
@@ -57,8 +43,8 @@ function Home(props) {
         </button>
       </nav>
       <main>{renderTabContent()}</main>
-   
     </div>
   );
 }
+
 export default Home;
