@@ -250,3 +250,9 @@ button.link-button {
 .Goals button:hover {
   background-color: #0056b3;
 }
+
+/* Error message for login */
+.error-message{
+  color: red;
+  font-weight: bold;
+}

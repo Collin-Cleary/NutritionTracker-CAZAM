@@ -31,17 +31,18 @@ describe('Unit Tests', () => {
       }
     });
 
-    it('should return 401 for invalid credentials', () => {
-      const invalidCredentials = { userName: 'invalid_user', password: 'invalid_password' }; // NOSONAR
+    it('should return 401 for invalid password', async () => {
+      const invalidCredentials = { userName: 'john_doe', password: 'invalid_password' }; // NOSONAR
       const req = { body: invalidCredentials }; // Mock request object
       const res = { status: sinon.stub().returnsThis(), json: sinon.stub() }; // Mock response object
-      sinon.stub(User, 'findOne').resolves(null);
+      const user = { userName: 'existing_user', password: 'hashed_password' }; // NOSONAR
+      sinon.stub(User, 'findOne').resolves(user); 
       sinon.stub(bcrypt, 'compare').resolves(false);
-
-      authController.login(req, res);
-
-      assert(res.status.calledOnceWithExactly(401));
-      assert(res.json.calledOnceWithExactly({ message: 'Invalid username or password' }));
+    
+      await authController.login(req, res);
+    
+      sinon.assert.calledOnceWithExactly(res.status, 401);
+      sinon.assert.calledOnceWithExactly(res.json, { message: 'Invalid password' });
     });
   });
 
