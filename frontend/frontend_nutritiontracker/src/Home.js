@@ -13,7 +13,6 @@
     const [name, setName] = useState('');
     const [selectedTab, setSelectedTab] = useState('FoodItems');
     const [consumedCalories, setConsumedCalories] = useState(0);
-    // const [foodData, setFoodData] = useState([]);
     const [waterIntake, setWaterIntake] = useState(0);
     const [weight, setWeight] = useState(0);
     

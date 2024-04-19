@@ -14,7 +14,6 @@ function DietTracker({ consumedCalories, setConsumedCalories}) {
       const username = localStorage.getItem('userName');
       const date = new Date().toISOString().slice(0, 10);
       const url = `http://localhost:5000/api/calorie/${username}/${date}`;
-
       try {
         const response = await axios.get(url);
         if (response.data) {
@@ -85,9 +84,9 @@ function DietTracker({ consumedCalories, setConsumedCalories}) {
       <p>Calorie Goal: {calorieGoal} kcal</p>
       <p>Consumed Calories: {consumedCalories} kcal</p>
       <p>Progress: {progress}%</p>
-      <select onChange={(e) => setSelectedFood(foodData && foodData[e.target.value])}>
+      <select onChange={(e) => setSelectedFood(foodData[e.target.value])}>
     <option value="" disabled selected>Select food items</option>
-  {foodData && foodData.map((item, index) => (
+  {foodData.map((item, index) => (
     <option key={index} value={index}>
       {item.name} ({item.calories} kcal)
     </option>
