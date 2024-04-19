@@ -44,9 +44,7 @@ authController.login = async (req, res) => {
     // Find user
     const user = await User.findOne({ userName});
     if (!user) {
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-          };    
+        return res.status(404).json({ message: 'User not found' });
     }
     // Validate password
     const isPasswordValid = await bcrypt.compare(password, user.password);
