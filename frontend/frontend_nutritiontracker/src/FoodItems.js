@@ -7,6 +7,7 @@ const FoodItems = (props) => {
   const [searchTerms, setSearchTerms] = useState("")  
   const [currentList, setList] = useState([])
   const [servingAmount, setAmount] = useState(0)
+  const [customName, setCustomName] = useState("")
 
   useEffect(() => {
   }, []);
@@ -34,7 +35,7 @@ const FoodItems = (props) => {
         headers : {"Content-Type": "application/json"},
         body : JSON.stringify({
           nutrition : selectedFood.nutrients,
-          name : selectedFood.name,
+          name : customName ? customName : selectedFood.name,
           ingredients : selectedFood.name,
           userId : localStorage.getItem('userName')
         })
@@ -69,6 +70,7 @@ const FoodItems = (props) => {
               <p>Per {selectedFood.serving_size}</p>
               <button onClick={handleClose}>Close</button>
               <input type="number" placeholder='Amount' onChange={(e) => setAmount(e.target.value)}/>
+              <input type="text" placeholder='Name' onChange={(e) => setCustomName(e.target.value)}/>
               <button onClick={handleSaveToAccount}>Add</button>
             </div>
         )}
