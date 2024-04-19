@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import './App.css';
 
-var username;
+let username;
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const WaterGraph = () => {
