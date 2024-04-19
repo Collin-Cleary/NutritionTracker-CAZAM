@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from "axios";
 import { saveAs } from 'file-saver';
+import { jsPDF } from 'jspdf';
+
 
 import './App.css';
 
@@ -15,8 +17,11 @@ function DietPlanner() {
     const handleGeneratePlan = async () => {
         // Call ChatGPT to generate diet plan based on user inputs
         const dietPlanResponse = await generateDietPlan(currentWeight, goalWeight, dietType, healthConditions, misc);
-        setDietPlan(dietPlanResponse);
-        savePDF(dietPlanResponse);
+        setDietPlan(dietPlanResponse.dietPlan);
+        console.log('dietPlan type:', typeof dietPlanResponse.dietPlan);
+        console.log('dietPlan length:', dietPlanResponse.dietPlan.length);
+        console.log('dietPlan:', dietPlanResponse.dietPlan);
+        savePDF(dietPlanResponse.dietPlan);
     };
 
     const generateDietPlan = async (_currentWeight, _goalWeight, _dietType, _healthConditions, _misc) => {
@@ -35,9 +40,14 @@ function DietPlanner() {
     };
 
     const savePDF = (text) => {
-        const blob = new Blob([text], { type: 'text/plain' });
-        saveAs(blob, 'diet_plan.pdf');
+        const doc = new jsPDF();
+        
+        // Try different coordinates if necessary
+        doc.text(text, 10, 20); // Changed y-coordinate to 20
+        
+        doc.save('diet_plan.pdf');
     };
+    
 
     return (
         <div className="diet-planner">
@@ -69,12 +79,6 @@ function DietPlanner() {
                 <input type="text" value={misc} onChange={(e) => setMisc(e.target.value)} />
             </div>
             <button onClick={handleGeneratePlan}>Generate Diet Plan</button>
-            {dietPlan && (
-                <div className="diet-plan">
-                    <h3>Diet Plan:</h3>
-                    <p>{dietPlan}</p>
-                </div>
-            )}
         </div>
     );
 }
