@@ -1,6 +1,8 @@
+require('dotenv').config();
 const OpenAI = require('openai');
 const gptController = {};
 
+openAiApiKey = process.env.OPENAI_API_KEY
 gptController.generateDiet = async (req, res) => {
     const { currentWeight, goalWeight, dietType, healthConditions, misc } = req.body;
 
@@ -8,7 +10,7 @@ gptController.generateDiet = async (req, res) => {
 
     try {
         // Initialize OpenAI API client
-        const openai = new OpenAI({apiKey: 'sk-proj-NpZPA7qoVfDueEDhCl5HT3BlbkFJoIqhgbhvY2tsjB7oQtp4'}); 
+        const openai = new OpenAI({apiKey: openAiApiKey}); 
 
         // Generate diet plan using GPT-3
         const response = await openai.chat.completions.create({
