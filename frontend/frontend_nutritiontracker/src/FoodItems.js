@@ -56,7 +56,7 @@ const FoodItems = (props) => {
           <button onClick={(e) => {handleSearchFoodItem(); setCurrentList(currentSearch.foods)}}>search</button>
         </div>
         {currentList.map((food, index) => (
-            <div className="food-item" value={index} onClick={(e) => handleClick(food)}>
+            <div className="food-item" key={`${food.name} ${index}`} value={index} onClick={(e) => handleClick(food)}>
               {food.name}
             </div>
         ))}
