@@ -13,8 +13,10 @@
     const [name, setName] = useState('');
     const [selectedTab, setSelectedTab] = useState('FoodItems');
     const [consumedCalories, setConsumedCalories] = useState(0);
+    // const [foodData, setFoodData] = useState([]);
     const [waterIntake, setWaterIntake] = useState(0);
     const [weight, setWeight] = useState(0);
+    
 
     useEffect(() => {
       const fetchUserName = () => {
@@ -45,7 +47,7 @@
             <WaterGraph/>
             </div>;
         case 'DietTracker':
-          return <DietTracker consumedCalories={consumedCalories} setConsumedCalories={setConsumedCalories} />;
+          return <DietTracker consumedCalories={consumedCalories} setConsumedCalories={setConsumedCalories}  />;
         case 'DietPlanner':
           return <DietPlanner/>;
         default:
