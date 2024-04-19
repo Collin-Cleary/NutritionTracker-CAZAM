@@ -1,37 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const baseUrl = 'http://localhost:5000';
+import FoodSearch from './databaseFetcher';
 
 const FoodItems = (props) => {
   const [selectedFood, setSelectedFood] = useState(null);
-  const [foodData, setFoodData] = useState([]);
+  const currentSearch = new FoodSearch()
+  const [searchTerms, setSearchTerms] = useState("")  
+  const [currentList, setCurrentList] = useState([])
+  const [servingAmount, setServingAmount] = useState(0)
+  const [customName, setCustomName] = useState("")
 
   useEffect(() => {
-    const storedFoodData = localStorage.getItem('foodData');
-
-    if (storedFoodData) {
-      setFoodData(JSON.parse(storedFoodData));
-    } else {
-      axios.get(`${baseUrl}/items`, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-          .then(response => {
-            if (response.status === 200) {
-              const data = response.data;
-              setFoodData(data);
-
-              localStorage.setItem('foodData', JSON.stringify(data));
-            } else {
-              console.log('Get Food items failed.');
-            }
-          })
-          .catch(error => {
-            console.log(`Error fetching data from the server: `, error);
-          });
-    }
   }, []);
 
   const handleClick = (food) => {
@@ -42,22 +20,58 @@ const FoodItems = (props) => {
     setSelectedFood(null);
   };
 
+
+  const handleSearchFoodItem = async () => {
+    await currentSearch.fetchForData(searchTerms)
+  }
+
+  const handleSaveToAccount = async () => {
+    try {
+      Object.entries(selectedFood.nutrients).forEach(([key, value]) => {
+        selectedFood.nutrients[key] *= servingAmount;
+      })
+      const response = await fetch(`http://localhost:5000/api/fooditem`, {
+        method: "POST",
+        headers : {"Content-Type": "application/json"},
+        body : JSON.stringify({
+          nutrition : selectedFood.nutrients,
+          name : customName || selectedFood.name,
+          ingredients : selectedFood.name,
+          userId : localStorage.getItem('userName')
+        })
+      })
+      if (!response.ok){
+        throw new Error("Failed to Fetch data")
+      }
+      handleClose()
+    } catch (error) {
+      console.error("Failed to fetch: ", error.message)
+    }
+  }
+
   return (
       <div className="Items">
-        {foodData.map((food, index) => (
-            <div className="food-item" key={index} onClick={() => handleClick(food)}>
-              {food.item_name}
+        <div>
+          <input type="text" placeholder='Search for Foods' onChange={(e) => setSearchTerms(e.target.value)}/>
+          <button onClick={(e) => {handleSearchFoodItem(); setCurrentList(currentSearch.foods)}}>search</button>
+        </div>
+        {currentList.map((food, index) => (
+            <div className="food-item" key={`${food.name} ${index}`} value={index} onClick={(e) => handleClick(food)}>
+              {food.name}
             </div>
         ))}
-
         {selectedFood && (
             <div className="modal">
-              <h2>{selectedFood.item_name}</h2>
-              <p>Carbs: {selectedFood.carbs}g</p>
-              <p>Proteins: {selectedFood.proteins}g</p>
-              <p>Fats: {selectedFood.fats}g</p>
-              <p>Vitamins: {selectedFood.vitamins}</p>
+              <h2>{selectedFood.name}</h2>
+              <p>Carbs: {selectedFood.nutrients.Carbohydrates}g</p>
+              <p>Proteins: {selectedFood.nutrients.Protein}g</p>
+              <p>Fats: {selectedFood.nutrients.Fats}g</p>
+              <p>Calories: {selectedFood.nutrients.Calories}</p>
+              <p>Per {selectedFood.serving_size}</p>
               <button onClick={handleClose}>Close</button>
+              <input type="number" placeholder='Amount' onChange={(e) => setServingAmount(e.target.value)}/>
+              <input type="text" placeholder='Name' onChange={(e) => setCustomName(e.target.value)}/>
+              <button onClick={handleSaveToAccount}>Add</button>
             </div>
         )}
       </div>
