@@ -21,7 +21,6 @@ gptController.generateDiet = async (req, res) => {
         // Extract generated diet plan from GPT-3 response
         const dietPlan = response.choices[0].message.content;
         console.log(dietPlan);
-
         // Send generated diet plan as response
         res.json({ dietPlan });
     } catch (error) {
