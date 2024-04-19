@@ -3,10 +3,10 @@ import FoodSearch from './databaseFetcher';
 
 const FoodItems = (props) => {
   const [selectedFood, setSelectedFood] = useState(null);
-  const [currentSearch, newSearch] = useState(new FoodSearch)
+  const currentSearch = new FoodSearch()
   const [searchTerms, setSearchTerms] = useState("")  
-  const [currentList, setList] = useState([])
-  const [servingAmount, setAmount] = useState(0)
+  const [currentList, setCurrentList] = useState([])
+  const [servingAmount, setServingAmount] = useState(0)
   const [customName, setCustomName] = useState("")
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const FoodItems = (props) => {
         headers : {"Content-Type": "application/json"},
         body : JSON.stringify({
           nutrition : selectedFood.nutrients,
-          name : customName ? customName : selectedFood.name,
+          name : customName || selectedFood.name,
           ingredients : selectedFood.name,
           userId : localStorage.getItem('userName')
         })
@@ -53,10 +53,10 @@ const FoodItems = (props) => {
       <div className="Items">
         <div>
           <input type="text" placeholder='Search for Foods' onChange={(e) => setSearchTerms(e.target.value)}/>
-          <button onClick={(e) => {handleSearchFoodItem(); setList(currentSearch.foods)}}>search</button>
+          <button onClick={(e) => {handleSearchFoodItem(); setCurrentList(currentSearch.foods)}}>search</button>
         </div>
         {currentList.map((food, index) => (
-            <div className="food-item" key={index} value={index} onClick={(e) => handleClick(food)}>
+            <div className="food-item" value={index} onClick={(e) => handleClick(food)}>
               {food.name}
             </div>
         ))}
@@ -69,7 +69,7 @@ const FoodItems = (props) => {
               <p>Calories: {selectedFood.nutrients.Calories}</p>
               <p>Per {selectedFood.serving_size}</p>
               <button onClick={handleClose}>Close</button>
-              <input type="number" placeholder='Amount' onChange={(e) => setAmount(e.target.value)}/>
+              <input type="number" placeholder='Amount' onChange={(e) => setServingAmount(e.target.value)}/>
               <input type="text" placeholder='Name' onChange={(e) => setCustomName(e.target.value)}/>
               <button onClick={handleSaveToAccount}>Add</button>
             </div>
