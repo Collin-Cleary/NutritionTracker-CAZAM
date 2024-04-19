@@ -47,10 +47,6 @@ function WaterTracker({ waterIntake, setWaterIntake }) {
     
         try {
             const response = await axios.get(url);
-            // console.log('Response:', response);
-            // console.log('Response data:', response.data);
-            // console.log('Response data length:', response.data[0].amount);
-            // console.log('Amount:', response.data.amount);
             if (response.data !== null ) {
                 const updatedAmount = response.data.amount + amount;
                 console.log('Updated water intake:', updatedAmount);
