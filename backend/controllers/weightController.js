@@ -17,4 +17,14 @@ weightController.deleteWeightItemData = async (req, res) => {
   res.status(result.status).json(result.json)
 }; 
 
+weightController.getWeightRecord = async (req, res) => {
+  const result = await weightModule.getWeightRecord(req.params.userId, req.params.date)
+  res.status(result.status).json(result.json)
+};
+
+weightController.updateWeightRecord = async (req, res) => {
+  const result = await weightModule.updateWeightRecord(req.params.userId, req.params.date, req.body.value)
+  res.status(result.status).json(result.json)
+};
+
 module.exports = weightController

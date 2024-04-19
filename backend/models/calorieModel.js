@@ -44,5 +44,47 @@ async function getCalorieItems(query) {
   }
 }
 
+async function getHighestCalorieItem(query) {
+  try {
+    const data = await Calorie.aggregate([
+      { $match: query }, 
+      { $sort: { intake: -1 } }, 
+      { $limit: 1 } 
+    ]);
+    
+    if (data.length === 0) {
+      return { status: 404, json: { message: 'No records found' } };
+    }
 
-module.exports = {Calorie, deleteCalorieItem, createCalorieItem, getCalorieItems};
+    return { status: 200, json: data };
+  } catch (err) {
+    return { status: 500, json: { message: err.message } };
+  }
+}
+
+async function getCalorieItemDataByIdAndDate(id, date) {
+  try {
+    const data = await Calorie.findOne({ _id: id, date: date });
+    if (!data) {
+      return { status: 404, json: { message: 'No records found' } };
+    }
+    return { status: 200, json: data };
+  } catch (err) {
+    return { status: 500, json: { message: err.message } };
+  }
+}
+
+async function updateCalorieItemData(userId, date, intake) {
+  try {
+    const data = await Calorie.findOneAndUpdate({ userId: userId, date: date }, { intake: intake }, { new: true });  
+    if (!data) {
+      return { status: 404, json: { message: 'No records found' } };
+    } 
+    return { status: 200, json: data };
+  }
+  catch (err) {
+    return { status: 500, json: { message: err.message } };
+  }
+}
+
+module.exports = {Calorie, deleteCalorieItem, createCalorieItem, getCalorieItems,getHighestCalorieItem,getCalorieItemDataByIdAndDate,updateCalorieItemData};

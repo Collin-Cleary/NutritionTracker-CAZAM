@@ -12,16 +12,23 @@ const foodEntryController = require('../controllers/foodEntryController');
 router.get('/water', waterController.getWaterItemData);
 router.post('/water', waterController.createWaterItemData);
 router.delete('/water/:id', waterController.deleteWaterItemData);
+router.get('/water/:userId/:date', waterController.getWaterRecord);
+router.put('/water/:userId/:date', waterController.updateWaterRecord);
 
 // Calorie routes
 router.get('/calorie', calorieController.getCalorieItemData);
+router.get('/calorie/:id/:date', calorieController.getCalorieItemDataByIdAndDate);
+router.get('/highestcalorie', calorieController.getHighestCalorieItemData);
 router.post('/calorie', calorieController.createCalorieItemData);
+router.put('/calorie/:id/:date', calorieController.updateCalorieItemData);
 router.delete('/calorie/:id', calorieController.deleteCalorieItemData);
 
 // Weight routes
 router.get('/weight', weightController.getWeightItemData);
 router.post('/weight', weightController.createWeightItemData);
 router.delete('/weight/:id', weightController.deleteWeightItemData);
+router.get('/weight/:userId/:date', weightController.getWeightRecord);
+router.put('/weight/:userId/:date', weightController.updateWeightRecord);
 
 // Food Item Routes
 router.get('/fooditem', foodItemController.getFoodItemData);

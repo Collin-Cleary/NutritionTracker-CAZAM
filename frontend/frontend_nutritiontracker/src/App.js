@@ -5,7 +5,7 @@ import Home from './Home';
 import axios from "axios";
 
 const baseUrl = "http://localhost:5000";
-
+axios.defaults.baseURL = 'http://localhost:5000';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
