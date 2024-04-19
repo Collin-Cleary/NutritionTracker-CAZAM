@@ -41,10 +41,17 @@ function DietPlanner() {
 
     const savePDF = (text) => {
         const doc = new jsPDF();
+        const textLines = doc.splitTextToSize(text, doc.internal.pageSize.width - 20);
+        let y = 10;
         
-        // Try different coordinates if necessary
-        doc.text(text, 10, 20); // Changed y-coordinate to 20
-        
+        textLines.forEach(line => {
+            if (y > doc.internal.pageSize.height - 20) {
+                doc.addPage();
+                y = 10;
+            }
+            doc.text(line, 10, y);
+            y += 10; // Increment the Y position
+        });
         doc.save('diet_plan.pdf');
     };
     
