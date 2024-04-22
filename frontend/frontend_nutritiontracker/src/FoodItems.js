@@ -53,7 +53,7 @@ const FoodItems = (props) => {
       <div className="Items">
         <div>
           <input type="text" placeholder='Search for Foods' onChange={(e) => setSearchTerms(e.target.value)}/>
-          <button onClick={(e) => {handleSearchFoodItem(); setCurrentList(currentSearch.foods)}}>search</button>
+          <button onClick={async (e) => {await handleSearchFoodItem(); setCurrentList([...currentSearch.foods])}}>search</button>
         </div>
         {currentList.map((food, index) => (
             <div className="food-item" key={`${food.name} ${index}`} value={index} onClick={(e) => handleClick(food)}>
