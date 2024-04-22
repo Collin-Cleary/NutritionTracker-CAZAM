@@ -11,12 +11,12 @@ function DietTracker({ consumedCalories, setConsumedCalories }) {
 
   useEffect(() => {
     console.log('useEffect called');
-    const fetchData = async () => {
-      await fetchCaloriesData();
-      await fetchFoodData();
-    };
+    fetchCaloriesData();
+    fetchFoodData();
+    console.log('useEffect finished');
+    
 
-    fetchData();
+    
   }, []);
 
   const fetchCaloriesData = async () => {
@@ -25,8 +25,13 @@ function DietTracker({ consumedCalories, setConsumedCalories }) {
     const url = `http://localhost:5000/api/calorie/${username}/${date}`;
     try {
       const response = await axios.get(url);
+
       if (response.data) {
         setConsumedCalories(response.data[0].intake);
+      }
+      else {
+        setConsumedCalories(0);
+        await axios.post('http://localhost:5000/api/calorie', { date, userId: username, intake:0 });
       }
     } catch (error) {
       console.log('Error fetching data:', error);
@@ -73,6 +78,7 @@ function DietTracker({ consumedCalories, setConsumedCalories }) {
 
   const handleAddFoodItem = async () => {
     if (selectedFood && quantity) {
+      console.log('Adding food item:', selectedFood, quantity);
       const intake = selectedFood.calories * quantity;
       await updateConsumedCalories(intake);
     }
