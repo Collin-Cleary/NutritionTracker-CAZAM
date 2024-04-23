@@ -48,9 +48,10 @@ function DietTracker({ consumedCalories, setConsumedCalories }) {
         params: { userId: username }
       });
       if (foodResponse.data) {
+        console.log('Food data:', foodResponse.data);
         const transformedData = foodResponse.data.map(item => ({
           name: item.name,
-          calories: item.nutrition.calories
+          calories: item.nutrition.Calories
         }));
         setFoodData(transformedData);
       }
