@@ -47,7 +47,7 @@ function WeightTracker({ weight, setWeight }) {
     };
 
     return (
-        <div className='WeightTracker'>
+        <div className='Tracker'>
             <h2>Weight Tracker</h2>
             <p>Current weight: {weight} kg</p>
             <input type='number' placeholder='Enter your weight' onChange={(e) => setWeight(e.target.value)} />

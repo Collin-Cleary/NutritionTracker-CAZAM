@@ -71,7 +71,7 @@ function WaterTracker({ waterIntake, setWaterIntake }) {
     const progress = Math.round((waterIntake / goal) * 100);
 
     return (
-        <div className='WaterTracker'>
+        <div className='Tracker'>
             <h2>Water Tracker</h2>
             <div className='Progress'>
                 <div

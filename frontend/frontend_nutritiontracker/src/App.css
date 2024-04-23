@@ -41,11 +41,9 @@ header {
   padding: 0px;
   display: inline;
   margin-right: 20px;
+  font-size: 20px;
 }
-.header-right ul li:hover {
-  background-color: #fff;
-  color: teal;
-}
+
 .header-right ul li a {
   text-decoration: none;
   color: #fff;
@@ -62,6 +60,7 @@ header {
   color: teal;
   background-color: #fff;
 }
+
 
 /*main content area styling */
 main {
@@ -132,8 +131,6 @@ button.link-button:hover{
   cursor: pointer;
 }
 
-
-
 .food-item {
   padding: 10px;
   margin-bottom: 10px;
@@ -177,12 +174,14 @@ button.link-button:hover{
   align-items: center;
   background-color: #f4f4f4;
   border-bottom: 1px solid #ccc;
+  padding-top: 5px;
 }
 
 .User-head {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
 }
 
 /* Style the buttons inside the nav element */
@@ -226,12 +225,6 @@ button.link-button:hover{
   margin: 20px auto; /* Center the component */
 }
 
-.diet-planner h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: teal; /* Match header color */
-}
-
 .input-section {
   margin-bottom: 15px;
 }
@@ -272,7 +265,11 @@ button:hover {
 }
 
 
-
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: teal; /* Match header color */
+}
 
 /* User Goals */
 
@@ -284,12 +281,6 @@ button:hover {
   padding: 20px;
   background-color: #f6f7f8;
   font-family: Arial, sans-serif;
-}
-
-.Tracker h1 {
-  color: #4b4b4b;
-  font-size: 24px;
-  margin-bottom: 20px;
 }
 
 .Tracker p {
@@ -337,8 +328,8 @@ input label {
 }
 
 input,
-  input select {
-  width: calc(100% - 20px); /* Adjust input width */
+select {
+  width: calc(100% - 20px);
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ccc;

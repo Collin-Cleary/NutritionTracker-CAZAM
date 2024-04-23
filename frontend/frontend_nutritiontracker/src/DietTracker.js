@@ -90,7 +90,7 @@ function DietTracker({ consumedCalories, setConsumedCalories }) {
   const progress = Math.round((consumedCalories / calorieGoal) * 100);
   return (
     <div className="Tracker">
-      <h1>Diet Tracker</h1>
+      <h2>Diet Tracker</h2>
       <p>Calorie Goal: {calorieGoal} kcal</p>
       <p>Consumed Calories: {consumedCalories} kcal</p>
       <p>Progress: {progress}%</p>

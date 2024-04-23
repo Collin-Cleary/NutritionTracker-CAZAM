@@ -43,7 +43,7 @@ function DietPlanner() {
                 duration: _duration, 
                 misc: _misc
             });
-            return response.data; // Assuming the response contains the generated diet plan
+            return response.data;
         } catch (error) {
             console.error('Error generating diet plan:', error);
         }
@@ -84,7 +84,6 @@ function DietPlanner() {
                     <option value="vegetarian">Vegetarian</option>
                     <option value="non-vegetarian">Non-Vegetarian</option>
                     <option value="vegan">Vegan</option>
-                    {/* Add more options as needed */}
                 </select>
             </div>
             <div className="input-section">

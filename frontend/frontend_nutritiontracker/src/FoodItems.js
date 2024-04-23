@@ -50,7 +50,7 @@ const FoodItems = (props) => {
   }
 
   return (
-      <div className="Items">
+      <div className="Tracker">
         <div>
           <input type="text" placeholder='Search for Foods' onChange={(e) => setSearchTerms(e.target.value)}/>
           <button onClick={async (e) => {await handleSearchFoodItem(); setCurrentList([...currentSearch.foods])}}>search</button>
