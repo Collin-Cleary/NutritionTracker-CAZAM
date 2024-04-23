@@ -1,4 +1,4 @@
-  import React, { useState, useEffect } from 'react';
+  import React, { useState } from 'react';
   import './App.css';
   import FoodItems from './FoodItems';
   import DietTracker from './DietTracker';
@@ -10,22 +10,11 @@
   import WaterGraph from './WaterGraph';
 
   function Home(props) {
-    const [name, setName] = useState('');
     const [selectedTab, setSelectedTab] = useState('FoodItems');
     const [consumedCalories, setConsumedCalories] = useState(0);
     const [waterIntake, setWaterIntake] = useState(0);
     const [weight, setWeight] = useState(0);
     
-
-    useEffect(() => {
-      const fetchUserName = () => {
-        const storedUsername = localStorage.getItem('name');
-        if (storedUsername) {
-          setName(storedUsername);
-        }
-      };
-      fetchUserName(); // Call the function
-    }, []);
 
     const handleTabChange = (tab) => {
         setSelectedTab(tab);
@@ -69,9 +58,6 @@
 
     return (
       <div className="App">
-        <h2 className='User-head'>
-          Logged User: {name}
-        </h2>
         <nav className='Home-nav'>
           <button type="button" onClick={() => handleTabChange('FoodItems')}>
             Food/Meal Items
