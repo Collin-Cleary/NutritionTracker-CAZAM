@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
 
-function DietTracker({ consumedCalories, setConsumedCalories}) {
-  
+function DietTracker({ consumedCalories, setConsumedCalories }) {
+
   const [calorieGoal] = useState(2000);
   const [selectedFood, setSelectedFood] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -11,15 +11,15 @@ function DietTracker({ consumedCalories, setConsumedCalories}) {
 
   useEffect(() => {
     console.log('useEffect called');
+    const fetchData = async () => {
+      await fetchCaloriesData();
+      await fetchFoodData();
+    };
+    console.log('useEffect finished');
     
 
-    fetchData();
+    
   }, []);
-
-  const fetchData = async () => {
-    await fetchCaloriesData();
-    await fetchFoodData();
-  };
 
   const fetchCaloriesData = async () => {
     const username = localStorage.getItem('userName');
@@ -27,8 +27,13 @@ function DietTracker({ consumedCalories, setConsumedCalories}) {
     const url = `http://localhost:5000/api/calorie/${username}/${date}`;
     try {
       const response = await axios.get(url);
+
       if (response.data) {
         setConsumedCalories(response.data[0].intake);
+      }
+      else {
+        setConsumedCalories(0);
+        await axios.post('http://localhost:5000/api/calorie', { date, userId: username, intake:0 });
       }
     } catch (error) {
       console.log('Error fetching data:', error);
@@ -44,7 +49,7 @@ function DietTracker({ consumedCalories, setConsumedCalories}) {
       if (foodResponse.data) {
         const transformedData = foodResponse.data.map(item => ({
           name: item.name,
-          calories: item.nutrition.Calories
+          calories: item.nutrition.calories
         }));
         setFoodData(transformedData);
       }
@@ -75,6 +80,7 @@ function DietTracker({ consumedCalories, setConsumedCalories}) {
 
   const handleAddFoodItem = async () => {
     if (selectedFood && quantity) {
+      console.log('Adding food item:', selectedFood, quantity);
       const intake = selectedFood.calories * quantity;
       await updateConsumedCalories(intake);
     }
@@ -88,13 +94,13 @@ function DietTracker({ consumedCalories, setConsumedCalories}) {
       <p>Consumed Calories: {consumedCalories} kcal</p>
       <p>Progress: {progress}%</p>
       <select onChange={(e) => setSelectedFood(foodData[e.target.value])}>
-    <option value="" disabled selected>Select food items</option>
-  {foodData.map((item, index) => (
-    <option key={index} value={index}>
-      {item.name} ({item.calories} kcal)
-    </option>
-  ))}
-</select>
+        <option value="" disabled selected>Select food items</option>
+        {foodData.map((item, index) => (
+          <option key={index} value={index}>
+            {item.name} ({item.calories} kcal)
+          </option>
+        ))}
+      </select>
       <input
         type="number"
         min="1"
