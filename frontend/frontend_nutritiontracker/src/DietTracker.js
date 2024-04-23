@@ -15,6 +15,7 @@ function DietTracker({ consumedCalories, setConsumedCalories }) {
       await fetchCaloriesData();
       await fetchFoodData();
     };
+    fetchData();
     console.log('useEffect finished');
     
 
