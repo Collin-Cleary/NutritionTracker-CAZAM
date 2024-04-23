@@ -7,8 +7,9 @@
 }
 
 body {
-  background-color: #f4f4f4;
+  background-color: #dde4ea  ;
   font-family: Arial, sans-serif;
+  font-weight: lighter;
 }
 
 /*header styling */
@@ -17,7 +18,8 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(0, 102, 238);
+  background-color: teal;
+  font-weight: bold;
   color: #fff;
   padding: 20px;
 }
@@ -36,14 +38,14 @@ header {
 }
 
 .header-right ul li {
-  padding: 10px;
+  padding: 0px;
   display: inline;
   margin-right: 20px;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .header-right ul li:hover {
   background-color: #fff;
-  color: rgb(0, 102, 238);
+  color: teal;
 }
 .header-right ul li a {
   text-decoration: none;
@@ -51,15 +53,15 @@ header {
 }
 
 .header-right ul li   button {
-  background-color: rgb(0, 102, 238);
+  background-color: teal;
   color: #fff;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
+  /* font-weight: bold; */
   border-style:hidden;
 }
 .header-right button:hover {
-  color: rgb(0, 102, 238);
+  color: teal;
   background-color: #fff;
 }
 
@@ -84,20 +86,20 @@ main {
 }
 
 .login-form button {
-  background-color: rgb(0, 102, 238);
+  background-color: teal;
   color: #fff;
   padding: 10px 20px;
   cursor: pointer;
   font-size: 16px;
   border-radius: 10px;
   border-color: #f4f4f4;
-  font-weight: bold;
+  /* font-weight: bold; */
   border-style:solid;
 }
 .login-form button:hover {
-  color: rgb(0, 102, 238);
+  color: teal;
   background-color: #fff;
-  border-color: rgb(0, 102, 238);  
+  border-color: teal;  
 }
 
 /*footer */
@@ -125,6 +127,14 @@ button.link-button {
   cursor: pointer;
 }
 
+button.link-button:hover{
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 
 
 .food-item {
@@ -137,7 +147,7 @@ button.link-button {
 }
 
 .food-item:hover {
-  background-color: rgba(14, 181, 218, 0.806);
+  background-color: rgba(0, 128, 128, 0.516);
 }
 
 .modal {
@@ -155,8 +165,8 @@ button.link-button {
   display: inline-block;
   margin-top: 20px;
   padding: 10px 20px;
-  border: none;
-  background-color: #007bff;
+  border: 3px solid;
+  background-color: teal;
   color: #fff;
   cursor: pointer;
 }
@@ -181,12 +191,11 @@ button.link-button {
 /* Style the buttons inside the nav element */
 .Home-nav button {
   font-size: 18px;
-  font-weight: bold;
   color: black;
   text-transform: uppercase;
   padding: 10px 20px;
   border: none;
-  border-bottom: 3px solid gray;
+  border-bottom: 4px solid gray;
   background-color: transparent;
 }
 
@@ -198,17 +207,75 @@ button.link-button {
 /* Define the active class */
 .Home-nav button:active {
   background-color: lightgray;
-  border-bottom: 3px solid rgb(0, 102, 238);
+  border-bottom: 5px solid teal;
 }
 .Home-nav button.active {
   background-color: lightgray;
-  border-bottom: 3px solid rgb(0, 102, 238);
+  border-bottom: 5px solid teal;
 }
 
 /* Diet Planner */
 .Planner {
   padding: 20px;
 }
+
+.diet-planner {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px #ccc;
+  text-align: center;
+  max-width: 500px; /* Limit width for better readability */
+  margin: 20px auto; /* Center the component */
+}
+
+.diet-planner h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: teal; /* Match header color */
+}
+
+.input-section {
+  margin-bottom: 15px;
+}
+
+.input-section label {
+  display: block;
+  /* font-weight: bold; */
+  margin-bottom: 5px;
+}
+
+.input-section input,
+.input-section select {
+  width: calc(100% - 20px); /* Adjust input width */
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.input-section select {
+  cursor: pointer;
+}
+
+button {
+  background-color: teal;
+  color: #fff;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bolder;
+  border: 3px solid teal;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: lightgray;
+  color: teal;
+}
+
+
 
 
 /* User Goals */
@@ -240,11 +307,18 @@ button.link-button {
   margin-top: 20px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: teal;
+  border: 3px solid teal;
   color: #fff;
   font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+.Tracker button:hover {
+  background-color: lightgray;
+  border: 3px solid teal;
+  color: teal;
 }
 
 .Goals button:hover {
@@ -255,4 +329,28 @@ button.link-button {
 .error-message{
   color: red;
   font-weight: bold;
+}
+
+
+input {
+  margin-bottom: 15px;
+}
+
+input label {
+  display: block;
+  /* font-weight: bold; */
+  margin-bottom: 5px;
+}
+
+input,
+  input select {
+  width: calc(100% - 20px); /* Adjust input width */
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input select {
+  cursor: pointer;
 }

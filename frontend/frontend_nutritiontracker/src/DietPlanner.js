@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import { saveAs } from 'file-saver';
 import { jsPDF } from 'jspdf';
 
 
@@ -70,7 +69,7 @@ function DietPlanner() {
             <div className="input-section">
                 <label>Diet Type:</label>
                 <select value={dietType} onChange={(e) => setDietType(e.target.value)}>
-                    <option value="">Select Diet Type</option>
+                    <option value=""></option>
                     <option value="vegetarian">Vegetarian</option>
                     <option value="non-vegetarian">Non-Vegetarian</option>
                     <option value="vegan">Vegan</option>
@@ -82,10 +81,16 @@ function DietPlanner() {
                 <input type="text" value={healthConditions} onChange={(e) => setHealthConditions(e.target.value)} />
             </div>
             <div className="input-section">
-                <label>Misc:</label>
+                <label>Additional inputs:</label>
                 <input type="text" value={misc} onChange={(e) => setMisc(e.target.value)} />
             </div>
             <button onClick={handleGeneratePlan}>Generate Diet Plan</button>
+            {dietPlan && (
+                <div className="diet-plan">
+                    <h3>Diet Plan:</h3>
+                    <p>{dietPlan}</p>
+                </div>
+            )}
         </div>
     );
 }

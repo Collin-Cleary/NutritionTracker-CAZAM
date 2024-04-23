@@ -82,7 +82,7 @@ function App() {
       {isLoggedIn ? <Home /> : <Login handleLogin={handleLogin} />}
 
       <footer>
-        <p>Group-3</p>
+        <p>Group-2</p>
       </footer>
     </div>
   );
