@@ -10,12 +10,13 @@ function DietPlanner() {
     const [goalWeight, setGoalWeight] = useState('');
     const [dietType, setDietType] = useState('');
     const [healthConditions, setHealthConditions] = useState('');
+    const [duration, setDuration] = useState('');
     const [misc, setMisc] = useState('');
     const [dietPlan, setDietPlan] = useState('');
 
     const handleGeneratePlan = async () => {
         // Call ChatGPT to generate diet plan based on user inputs
-        const dietPlanResponse = await generateDietPlan(currentWeight, goalWeight, dietType, healthConditions, misc);
+        const dietPlanResponse = await generateDietPlan(currentWeight, goalWeight, dietType, healthConditions, duration, misc);
         setDietPlan(dietPlanResponse.dietPlan);
         console.log('dietPlan type:', typeof dietPlanResponse.dietPlan);
         console.log('dietPlan length:', dietPlanResponse.dietPlan.length);
@@ -23,13 +24,14 @@ function DietPlanner() {
         savePDF(dietPlanResponse.dietPlan);
     };
 
-    const generateDietPlan = async (_currentWeight, _goalWeight, _dietType, _healthConditions, _misc) => {
+    const generateDietPlan = async (_currentWeight, _goalWeight, _dietType, _healthConditions, _duration, _misc) => {
         try {
             const response = await axios.post('http://localhost:5000/gpt/generateDiet', {
                 currentWeight: _currentWeight, 
                 goalWeight:_goalWeight, 
                 dietType: _dietType, 
-                healthConditions: _healthConditions, 
+                healthConditions: _healthConditions,
+                duration: _duration, 
                 misc: _misc
             });
             return response.data; // Assuming the response contains the generated diet plan
@@ -77,20 +79,25 @@ function DietPlanner() {
                 </select>
             </div>
             <div className="input-section">
-                <label>Health Conditions:</label>
-                <input type="text" value={healthConditions} onChange={(e) => setHealthConditions(e.target.value)} />
+                <label>
+                    Health Conditions:
+                    <input type="text" value={healthConditions} onChange={(e) => setHealthConditions(e.target.value)} />
+                </label>
             </div>
             <div className="input-section">
-                <label>Additional inputs:</label>
-                <input type="text" value={misc} onChange={(e) => setMisc(e.target.value)} />
+                <label>
+                    Duration (in weeks):
+                    <input type="number" value={duration} onChange={(e) => setDuration(e.target.value)} />
+                </label>
+            </div>
+            <div className="input-section">
+                <label>
+                    Additional inputs:
+                    <input type="text" value={misc} onChange={(e) => setMisc(e.target.value)} />
+                </label>
+                
             </div>
             <button onClick={handleGeneratePlan}>Generate Diet Plan</button>
-            {dietPlan && (
-                <div className="diet-plan">
-                    <h3>Diet Plan:</h3>
-                    <p>{dietPlan}</p>
-                </div>
-            )}
         </div>
     );
 }
